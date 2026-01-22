@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kIMI WIN payments solutions</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- STYLE SECTION START -->
+  <style>
+      /* Disable text selection */
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Disable drag of images and links */
+    img, a {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
+        pointer-events: auto;
+    }
+
+    /* Disable pointer events for iframes or embeds */
+    iframe, embed, object, video {
+        pointer-events: none;
+    }
+
+    /* Prevent right-click via pointer-events */
+    body {
+        cursor: default;
+    }
+    /* Enhanced page setup */
+    body {
+   background:linear-gradient(0deg, rgba(100,80,444,0.95) 0%, #893BFF 50%, #5539CC 100%);
+  background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            padding: 0;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  color: #2d3748;
+  height: 100%;
+  min-height: 100%;
+  max-height: 100vh;
+}
+    
+    .header-container {
+      min-width: 100vw;
+      object-fit: cover;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 110;
+      background-size: 100% 100%;
+            max-width: 100vw;
+            height: 35px;
+      font-weight: 900;
+      padding: 5px;
+      color:#fdbd01;
+      text-shadow:0 1px 1px rgba(0,0,0,0.9);
+      width: 100vw;
+    background: linear-gradient(0deg, rgba(190,80,150,0.2) 0%, #893BFF 10%, #5539CC 100%);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-text{
+        color:white;
+        font-family: Segoe UI;
+        font-size: 1rem;
+        flex-grow: 1;
+        text-align: center;
+    }
+    .back-button {
+        position:fixed;
+        top:10px;
+        left:10px;
+    background:transparent;
+    color: #fdbd01;
+    border: none;
+    background-size: 100% 100%;
+    cursor: pointer;
+    font-size: 25px;
+    font-weight: 900;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
+.back-button {
+  text-shadow: 
+    1px 1px 0 #eee, 
+    2px 2px 0 #333,
+    3px 3px 0 #333;
+}
+
+.back-button:hover {
+    transform: translateX(-2px);
+}
+.back-button:active{
+    transform: translateX(-5px);
+}
+.records-button {
+    position: fixed;
+    top:10px;
+    right:10px;
+    background:transparent;
+    color: #fdbd01;
+    border: none;
+    background-size: 100% 100%;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 900;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    text-decoration: none;
+    padding: 0;
+    margin-right: 0;
+}
+.records-button {
+  text-shadow: 
+    1px 1px 0 #eee, 
+    2px 2px 0 #333,
+    3px 3px 0 #333;
+}
+
+.records-button:hover {
+    transform: translateY(-2px);
+}
+
+    /* Small text styles */
+    h2, h3, h6, p, .card-content, .copy-text, .modal-content p {
+      font-size: small;
+    }
+
+    /* Certification badges */
+    .certification-badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    
+    .certification-badge {
+      width: 60px;
+      height: 30px;
+      object-fit: contain;
+    }
+    p {
+        color: black;
+        font-weight: 900;
+        font-size: 8px;
+        font-family:fantasy;  
+font-weight: 900;  
+text-transform: uppercase; /* Forces ALL CAPS */ 
+text-shadow: none;
+background: #EEEEEE;
+    }
+    h5 {
+      color: black;
+      margin: 5px;
+      border-radius: 5px;
+      display: inline-block;
+      align-content: center;
+      text-align: center;
+      font-size: 10px;
+      font-family: fantasy;
+    }
+    .selectamountdisplay{
+        margin-top: 55px;
+        width:100%;
+        background:transparent;
+        padding-top: 5px;
+        padding-bottom: 10px;
+    }
+    .amountinput{
+        width:95%;
+        height:25px;
+        background:rgba(0,0,0,0.5);
+        border:none;
+        outline:none;
+        border-radius: 4px;
+        color:rgba(255,255,255,0.8);
+        font-size: 14px;
+        text-align:left;
+        font-family:Segoe UI;
+        padding-left: 10px;
+    }
+
+    /* Grid container for cards */
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* FORCE 4 cards per row */
+  gap: 5px;
+  width:98%;
+  margin-top: 10px;
+  justify-self: center;
+}
+
+    /* Enhanced amountoptions styling */
+    .amountoptions {
+      background:rgba(0,0,0,0.5);
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      font-family:Segoe UI;
+      padding: 5px;
+      border-radius:4px;
+      background-size: 100% 100%;
+      text-align: center;
+      cursor: pointer;
+      border:1px solid rgba(0,0,0,0.2);
+      width: 100%;
+      transition: all 0.3s ease;
+      text-shadow: 2px 2px 4px rgba(250, 42, 85, 0.1);
+    }
+    
+    .amountoptions:hover,
+    .amountoptions.selected {
+      background: linear-gradient(180deg, rgba(108,11,195,0.5), rgba(158,0,202,0.6));
+  box-shadow:
+    0 .51px 0 rgba(0,0,0,0.35),
+    0 1px 0 rgba(0,0,0,0.35);
+    }
+/* Amount Details Container */
+.amountdetails {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* exactly 2 grids */
+  gap: 10px;
+  padding: 5px;
+  max-width:100%;
+  margin: 0 auto;
+  background:rgba(0,0,0,0.5);
+  border-radius: 6px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.offeramountdetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 3px;
+  max-width: 100%;
+  margin: 10px auto;
+  background: linear-gradient(180deg, rgba(0,0,0,0.4),rgba(0,0,0,0.6));
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* LEFT GREEN DOT */
+.status-indicator {
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.greencircle {
+  background: #00ff3c;
+  height: 10px;
+  width: 10px;
+  border: 1px solid black;
+  outline: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(0,255,60,0.8);
+}
+.greencircle:active{
+    background-color: red;
+}
+
+/* CENTER BANNER */
+.banner-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.offerbanner {
+  position: relative;
+  height: 75px;
+  width: 100%;
+  max-width: 100%;
+  background: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEijjOlD1Po2IOntvg26VP5etWM6M6tKEroOqkUK4A0IwXMVsI43lO5SiIaLD1nJNhEWuiauHKlOWg1XtT7VOprD86-RcidAtFrTcrT_oIlBytW6gs7-OIcnkFcrXq5tv2B0VPQXas-xXYqX0k3229oqqICNK39xNaoWg58ww3y4sTEFEtBXD4EM1ZhyphenhyphenTQo/s16000/1000110992.png")
+              no-repeat center;
+  background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -5px;
+  margin-bottom: -5px;
+}
+.offerbanner:active{
+    transform:scale(0.95);
+}
+
+.banner-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #c0392b;
+  text-shadow: 1px 1px 0 #ffd97a;
+  font-family: "Trebuchet MS", serif;
+}
+
+/* RIGHT ARROW */
+.arrow-wrapper {
+  width: 25px;
+  min-height:75px;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:rgba(0,0,0,0.2);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.arrow-wrapper i {
+  font-size: 26px;
+  color: #ffffff;
+}
+.arrow-wrapper i:hover {
+  transform: scale(1);
+}
+.arrow-wrapper i:active {
+  transform: scale(0.5);
+}
+
+/* Individual Amount Card */
+.amount-card {
+  background: radial-gradient(
+      circle at top,
+      rgba(40, 120, 95, 0.45),
+      rgba(5, 25, 20, 0.95)
+  );
+  border: 0.6px solid rgba(0,0,0,0.5);
+  outline:1.4px solid #fdbd01;
+  border-radius: 4px;
+  padding:0;
+  color: #ffffff;
+  box-shadow:
+        inset 0 3px 36px rgba(255,0,255, 0.2),
+        inset 0 -3px 20px rgba(255, 0, 255, 0.3);
+  overflow: hidden;
+}
+.amount-card {
+  position: relative; /* Required for absolute positioning of pseudo-element */
+  /* Your existing card styles */
+}
+
+.amount-card::after {
+  content: "";
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the sunburst */
+  background: 
+    radial-gradient(circle at center, rgba(0,0,0,0.0) 0%, transparent 100%),
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(0,0,0,0.01) 0deg 5deg,
+      rgba(182,0,238,0.09) 6deg 10deg
+    );
+  width: 300px;
+  height: 300px;
+  border-radius: 0;
+  z-index: 1; /* Adjust as needed */
+  pointer-events: none; /* Allows clicks to pass through */
+}
+
+/* Label (Cash / Bonus) */
+.amount-card .label {
+  color: #43f0c8;
+  font-size: 10px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  text-align: left;
+  padding:1px 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.6) 0%,
+    rgba(0,0,0,0.5) 20%,
+    rgba(0,0,0,0.3) 45%,
+    rgba(0,0,0,0.2) 60%,
+    rgba(0,0,0,0.1) 80%,
+    rgba(0,0,0,0.01) 100%
+  );
+}
+
+/* Amount Value */
+.amount-card .value {
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 1px;
+  text-shadow: 
+  0 0 5px rgba(205, 55, 333, 0.9),
+  0 0 10px rgba(205, 25, 445, 0.6),
+  0 0 15px rgba(255, 65, 555, 0.3);
+}
+    /* Enhanced modal overlay */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      top: 0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      overflow:auto;
+      background-color: white;
+      backdrop-filter: blur(0px);
+      animation: fadeIn 0.1s ease-out;
+      text-align:center;
+      max-width: 100vw;
+    }
+     .messagemodal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      overflow:auto;
+      text-align:center;
+      max-width: 100vw;
+    }
+
+    /* Enhanced modal content */
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      width: 100vw;
+      text-align: center;
+      position: absolute;
+      align-content: center;
+      justify-content: center;
+      justify-items: center;
+    }
+
+    /* Enhanced modal title */
+.modal-title {
+  background:transparent;
+  color:black;
+  font-size: 20px;
+  font-family: "Digital-7", "DS-DIGIT", "Seven Segment", fantasy;
+  font-weight: 900;
+  margin-bottom: -2px;
+  text-shadow: none;
+  padding:2px 8px;
+  margin-top: 5px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+}
+.message-modal-title {
+    background:rgba(0,0,0,0.9);
+  color:#fdbd01;
+  font-size: 20px;
+  font-family: "Digital-7", "DS-DIGIT", "Seven Segment", fantasy;
+  font-weight: 900;
+  margin-bottom: -2px;
+  text-shadow: none;
+  padding:2px 8px;
+  margin-top: -30px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+  border:2px solid #fdbd01;
+}
+
+    /* Enhanced copy section */
+    .copy-section {
+  margin-bottom: 8px;
+  overflow: auto;
+  border: 1px solid rgba(52, 152, 219, 0.9);
+  color:black;
+  border-radius: 4px;
+}
+
+    /* Enhanced copy section title */
+    .copy-section-title {
+  color: Black;
+  padding-top: 5px;
+  text-shadow: none;
+  font-weight: 900;
+  font-family: fantasy;
+  font-size:14px;
+}
+
+    /* Enhanced copy item */
+    .copy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 5px;
+  font-size: 10px;
+  background:#C0C0C0;
+  font-family: fantasy;
+}
+
+    /* Enhanced copy text */
+    .copy-text {
+      font-size: 10px;
+      color:white ;
+      text-align: center;
+      flex: 1;
+      font-weight: 900;
+      font-family: fantasy;
+      text-shadow: 2px 2px 4px rgba(250, 42, 85, 0.01);
+    }
+
+    /* Enhanced copy button */
+    .copy-btn {
+      background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+      color: white;
+      border: none;
+      font-size: 7px;
+      padding: 4px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-left: 8px;
+      box-shadow: 0 3px 8px rgba(75, 108, 183, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 2px 2px 4px rgba(250, 42, 85, 0.2);
+    }
+
+    .copy-btn::after {
+      content: '✓ Copied!';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a936f 0%, #88d498 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      text-shadow: 2px 2px 4px rgba(250, 42, 85, 0.9);
+    }
+
+    .copy-btn.copied::after {
+      opacity: 1;
+    }
+    /* Enhanced UTR input */
+    .review-input {
+      width:90vw;
+      padding:6px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.8);
+      outline: 2px solid rgba(0,0,0,0.3);
+      margin-bottom: 8px;
+      font-family: Segoe UI;
+    }
+
+    /* Enhanced submit button */
+    .submit-review-btn {
+      color: black;
+      font-weight: 900;
+      border:;
+      padding:5px 10px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 2px;
+      font-family: fantasy;
+      font-size: 18px;
+    }
+    .close-modal-btn {
+      color: white;
+      font-weight: 900;
+      border: 2px solid white;
+      padding:2px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin: 2px;
+      font-family: Segoe UI;
+      background: rgba(0,0,0,0.9);
+      font-size: 18px;
+    }
+
+    /* Enhanced view UTRs button */
+    .depositBtn {
+      background:url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png'),rgba(0,0,0,0.7);
+      border-radius: 50px;
+      background-size: 100% 100%;
+      color: white;
+      font-family:Segoe UI;
+      font-weight: 900;
+      border: none;
+      padding:10px 25px;
+      border-radius: none;
+      cursor: pointer;
+      margin: 2px;
+       box-shadow: 0 2px 1px rgba(0, 0, 0, 1.3);
+            font-family: Segoe UI;
+  color: white; /* Your text color */
+  /* Primary method for modern browsers */
+  text-shadow: 
+    0 0 2px #003366,
+    0 0 2px #003366,
+    0 0 2px #003366,
+    0 0 2px #003366;
+      margin-top: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .depositBtn:active {
+      transform: scale(0.98);
+    }
+
+    /* Enhanced message modal */
+    #messageModal .modal-content {
+        position: fixed;
+        top:40%;
+      max-width: 90%;
+      justify-self: center;
+      text-align: center;
+      padding: 5px;
+      font-family:Segoe UI;
+      font-size: 10px;
+font-weight: 900;  
+text-transform: uppercase; /* Forces ALL CAPS */  
+background:transparent;
+animation: none;
+  filter: drop-shadow(0 0 15px #0ff)
+          drop-shadow(0 0 30px #0ff)
+          drop-shadow(0 0 45px #0ff)
+          drop-shadow(0 0 60px #0ff);
+    }
+    
+    #messageText {
+      color: rgba(255,255,255,1.9);
+      font-family: fantasy;
+      padding: 12px 0;
+      text-shadow: 2px 2px 4px rgba(250, 42, 85, 0.1);
+      padding:5px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+background:rgba(9,0,22,0.99);
+border: 2px solid #fdbd01;
+border-radius: 5px;
+animation: none;
+    }
+
+    /* ANIMATIONS SECTION */
+    /* Card text animation */
+    .card-content {
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Enhanced button hover animation */
+    .link-button:hover, 
+    .copy-btn:hover, 
+    .submit-review-btn:hover, 
+    .view-utrs-btn:hover,
+    .qr-button:hover {
+      transform: scale(1.03);
+    }
+
+    .open-app-btn:hover {
+      transform: translateX(5px);
+    }
+
+    .open-app-btn:hover .arrow-icon {
+      transform: translateX(4px);
+    }
+
+    /* Enhanced modal entrance animation */
+    .modal-content {
+      animation: modalFadeIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-300px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Enhanced copy button feedback */
+    .copy-btn:active {
+      transform: scale(0.95);
+    }
+
+/* ========== UPDATED DEPOSIT HISTORY MODAL ========== */
+.deposit-history-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;    
+  background-attachment: fixed;
+    overflow: hidden;
+    animation: modalSlideIn 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.deposit-history-content {
+    height:100%;
+    width:100%;
+    position: relative;
+}
+
+.deposit-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding:5px;
+    border-bottom: 2px solid rgba(0, 230, 235, 0.7);
+    font-size: 12px;
+    font-family: fantasy;
+    position: relative;
+    width:100%;
+    background: linear-gradient(
+  90deg,
+  rgba(0,0,0,0.5) 0%,
+  rgba(11,0,22,0.5) 15%,
+  rgba(22,0,44,0.5) 20%,
+  rgba(44,10,88,0.5) 30%,
+  rgba(88,20,166,0.5) 40%,
+  rgba(166,40,360,0.5) 50%,
+  rgba(88,20,166,0.5) 60%,
+  rgba(44,10,88,0.5) 70%,
+  rgba(22,0,44,0.5) 80%,
+  rgba(11,0,22,0.5) 85%,
+  rgba(0,0,0,0.5) 100%
+);
+}
+
+.deposit-history-title {
+    color: #00ffcc;
+    font-weight: 900;
+    font-size: 20px;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.7);
+    letter-spacing: 1px;
+    font-family:fantasy;
+    text-transform:uppercase ;
+    margin:5px;
+}
+
+.close-history {
+    position: fixed;
+    top:5px;
+    right:5px;
+    color: #00ffcc;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close-history:hover {
+    color: #00ffcc;
+    transform: scale(1.2);
+}
+
+.status-tabs {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 2px solid rgba(0, 230, 235, 0.5);
+    font-family: fantasy;
+    font-size: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.status-tab {
+    padding: 8px 15px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.status-tab::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.status-tab:hover::before {
+    left: 100%;
+}
+
+.status-tab.active {
+    border-bottom: 3px solid #00ffcc;
+    color: #00ffcc;
+    background: rgba(0, 255, 204, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+}
+
+/* ========== DEPOSIT CARD STYLING ========== */
+.deposit-cards-container {
+    padding: 10px;
+    display: grid;
+    gap: 10px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+.deposit-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid rgba(0, 230, 235, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+}
+
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.amount-section {
+    font-size: 18px;
+    font-weight: 900;
+    color: #E2F516;
+    text-shadow: 0 0 8px rgba(226, 245, 22, 0.6);
+}
+
+.status-section {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 900;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid rgba(0, 230, 235, 0.5);
+}
+
+.status-pending {
+    background: linear-gradient(135deg, #FFA500, #FF8C00);
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}
+
+.status-processing {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+.status-success {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.status-failed {
+    background: linear-gradient(135deg, #F44336, #D32F2F);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+}
+
+.code-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: white;
+}
+
+.copy-btn-small {
+    background: transparent;
+    border: 1px solid rgba(0, 230, 235, 0.5);
+    color: #00ffcc;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 9px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.copy-btn-small:hover {
+    background: rgba(0, 255, 204, 0.1);
+}
+
+.bottom-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #cccccc;
+}
+
+.support-btn {
+    background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+    color: white;
+    border: 1px solid rgba(0, 230, 235, 0.5);
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(58, 123, 213, 0.3);
+    font-family: Segoe UI;
+}
+
+.support-btn:hover {
+    box-shadow: 0 0 15px rgba(58, 123, 213, 0.5);
+}
+
+/* Empty State */
+.empty-deposit {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+}
+
+.empty-deposit i {
+    font-size: 40px;
+    margin-bottom: 15px;
+    display: block;
+    color: rgba(0, 255, 204, 0.5);
+}
+
+/* Visual effects */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 204, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 255, 204, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 204, 0);
+    }
+}
+
+.flash {
+    animation: flash 1s;
+}
+
+@keyframes flash {
+    0%, 100% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: rgba(0, 255, 204, 0.3);
+    }
+}
+
+/* New Styles for Amount Validation */
+.error-message {
+    color: #ff6b6b;
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+    display: none;
+}
+
+.amount-display {
+    color: #fdbd01;
+    font-weight: 900;
+    font-size: 14px;
+    margin: 5px 0;
+}
+/* Root section */
+.payment-section {
+  background:transparent;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  color: #bfffe8;
+}
+
+/* Header */
+.payment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0.6) 0%,
+    rgba(0,0,0,0.5) 20%,
+    rgba(0,0,0,0.3) 45%,
+    rgba(0,0,0,0.2) 60%,
+    rgba(0,0,0,0.1) 80%,
+    rgba(0,0,0,0.01) 100%
+  );
+  border-left:2px solid #18f3b0;
+  padding: 4px;
+}
+
+.pmheader-text {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+  color:#18f3b0;
+  font-family: Segoe UI;
+}
+
+/* Cards container */
+.methods-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+/* Individual method card */
+.method {
+  background:rgba(0,0,0,0.5);
+  border-radius: 4px;
+  padding:2px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #e9fff7;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+/* Active (highlighted) card */
+.method:active {
+  background: linear-gradient(180deg, rgba(108,11,195,0.5), rgba(158,0,202,0.6));
+  box-shadow:
+    0 .51px 0 rgba(0,0,0,0.35),
+    0 1px 0 rgba(0,0,0,0.35);
+}
+
+/* Logos */
+.method-logo {
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+/* Example logo placeholders */
+.method-logo.zp-pay {
+  background-image: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiOy__Ik8gW2TWe-nIOuhSY7JYwNtq4dUOWHUj3vm3uv_0UiGXhYH6hj2-q3WMvJSpJymWOyF6ahBsEFQ-nXmGfpW55KmwR4ZIcUOhyeWYM7AT_vVWrZGqjwIEjHENoWp55HryvvlcK5sH2yqPkh_pCvF93kyV-JRD5a9I8C8lPuoVApkGZOi-XgCJbft8/s16000/1000110975.png");
+  background-color: #fff;
+}
+
+.method-logo.upi-vip {
+  background-image: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiaooYxdqZXlre4wT3foCurGdZUGESaQ9JKjwvLn-V_-nvxy7xID87iyDiYD1aaGhb6oZHesBshv_axJYxrrtP8iTsOmUSH248QxZB8BBTTCNkyZ5zeMxB6XpM3IDVCeDmaNJKcNgmtVWBWwX3XDG6svath9tXN8tNM5b2C9wJUt6xwbG7FtFov86QzR-o/s16000/1000110976.png");
+  background-color: #fff;
+}
+.method-logo.upi-01 {
+  background-image: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiz318JF95GDQ4meyaWrnNflyk0WhHDkc3LE_0EGBT7iNgaW5PlsOR3quj7vz_cEgILwFGt-5g1DGcs1p2nh27CzH4QEgJYO8T9CDj8tE6pZCAY2X1ui5bYUmwUDCYw-jo2P2tFGGeWDTPlwJmPNoq9RoCQloHQ8SzuRGZ5hiOPaOtaDeM47nJKsL6VcUA/s16000/1000110974.png");
+  background-color: #fff;
+}
+
+/* Text */
+.method-text {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+  </style>
+  <!-- STYLE SECTION END -->
+</head>
+
+<body>
+  <!-- UPDATED HEADER SECTION WITH FIXED TOP BAR -->
+  <div class="header-container"><div class="header-text">DEPOSIT</div></div>
+    <button class="back-button" onclick="window.location.href='home.html'">
+        <i class="fas fa-angle-left"></i>
+    </button>
+    <button class="records-button" onclick="viewDepositHistory()">
+        <i class="fas fa-book"></i> 
+    </button>
+  
+  <!-- Amount Input Section -->
+  <div class="selectamountdisplay">
+      <input type="number" id="amountbox" class="amountinput" placeholder="Please Select or Enter an Amount to Deposit" min="50" max="50000" oninput="validateCustomAmount()" />
+      <div class="error-message" id="amountError"></div>
+      <div class="amount-display" id="selectedAmountDisplay">Selected Amount:200</div>
+  </div>
+  
+  <!-- Amount Options Section -->
+  <div class="container">
+      <button class="amountoptions" onclick="selectAmount(50)">50</button>
+      <button class="amountoptions" onclick="selectAmount(100)">100</button>
+      <button class="amountoptions selected" onclick="selectAmount(200)">200</button>
+      <button class="amountoptions" onclick="selectAmount(300)">300</button>
+      <button class="amountoptions" onclick="selectAmount(500)">500</button>
+      <button class="amountoptions" onclick="selectAmount(1000)">1000</button>
+      <button class="amountoptions" onclick="selectAmount(1500)">1500</button>
+      <button class="amountoptions" onclick="selectAmount(2000)">2000</button>
+      <button class="amountoptions" onclick="selectAmount(5000)">5000</button>
+      <button class="amountoptions" onclick="selectAmount(10000)">10000</button>
+      <button class="amountoptions" onclick="selectAmount(20000)">20000</button>
+      <button class="amountoptions" onclick="selectAmount(50000)">50000</button>
+  </div>
+<!-- Payment Method Section -->
+<div class="payment-section">
+  <div class="payment-header">
+    <span class="pmheader-text">Payment Method</span>
+  </div>
+
+  <div class="methods-container" id="paymentMethods">
+    <div class="method" id="method-zp">
+      <div class="method-logo zp-pay"></div>
+      <div class="method-text">ZP-PAY</div>
+    </div>
+
+    <div class="method" id="method-upi-vip">
+      <div class="method-logo upi-vip"></div>
+      <div class="method-text">UPI VIP</div>
+    </div>
+
+    <div class="method" id="method-upi-01">
+      <div class="method-logo upi-01"></div>
+      <div class="method-text">UPI 01</div>
+    </div>
+  </div>
+</div>
+<script>
+  const methods = document.querySelectorAll('#paymentMethods .method');
+  
+  // Create click SFX audio element
+  const clickSFX = new Audio();
+  clickSFX.src = 'https://audio.jukehost.co.uk/93zIHUwOUTFF1mpNMJlB1c647rqFsgEg';
+  clickSFX.volume = 0.3; // Adjust volume as needed
+
+  function setActive(method) {
+    // remove active styling from all
+    methods.forEach(m => {
+      m.style.background = 'rgba(0,0,0,0.5)';
+      m.style.boxShadow = 'inset 0 0 0 1px rgba(255,255,255,0.05)';
+    });
+
+    // apply active styling
+    method.style.background =
+      'linear-gradient(180deg, rgba(108,11,195,0.5), rgba(158,0,202,0.6))';
+
+    method.style.boxShadow =
+      '0 .51px 0 rgba(0,0,0,0.35), 0 1.5px 0 rgba(0,0,0,0.35)';
+  }
+
+  // click handling
+  methods.forEach(method => {
+    method.addEventListener('click', () => {
+      // Play click SFX
+      clickSFX.currentTime = 0;
+      clickSFX.play().catch(e => console.log("Audio play failed:", e));
+      
+      // Set active method
+      setActive(method);
+    });
+  });
+
+  // ✅ select first method by default
+  if (methods.length > 0) {
+    setActive(methods[0]);
+  }
+</script>
+  
+  <!-- Amount Details Cards -->
+  <div class="amountdetails">
+    <div class="amount-card">
+      <div class="label">Cash</div>
+      <div class="value amountcard" id="depositamount">200.00</div>
+    </div>
+    <div class="amount-card">
+      <div class="label">Bonus</div>
+      <div class="value amountcard" id="bonusamount">10.00</div>
+    </div>
+  </div>
+  <div class="payment-header">
+    <span class="pmheader-text">Deposit Offer voucher</span>
+  </div>
+  <div class="offeramountdetails">
+    <div class="status-indicator">
+        <div class="greencircle"></div>
+    </div>
+
+    <div class="banner-wrapper">
+        <div class="offerbanner">
+        </div>
+    </div>
+
+    <div class="arrow-wrapper">
+        <i class="fas fa-angle-right"></i>
+    </div>
+</div>
+  
+  <!-- Deposit Now Button -->
+  <button class="depositBtn" onclick="openDepositModal()">DEPOSIT NOW</button>
+  
+  <!-- Additional Sections (Unchanged) -->
+  <style>
+/* General section container */
+.deposit-feedback-section {
+  width:100%;
+  background: transparent;
+  border-radius: 6px;
+  padding-top:10px;
+}
+
+/* Card style block for each section */
+.feedback-card {
+  background:rgba(0,0,0,0.5);
+  border-radius: 6px;
+  margin:5px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10px;
+  cursor: pointer;
+  border: 1px solid rgba(177, 25, 395, 0.15);
+}
+
+.feedback-card:active {
+  border:1px solid#fdbd01;
+}
+
+/* Icon section (left) */
+.feedback-icon {
+  background-repeat: no-repeat;
+  background-size: 40px 40px;
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}
+.feedback-icon1 {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 45px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+/* Text section */
+.feedback-text {
+  color:rgba(190,144,430,0.9);
+  font-family: Segoe UI;
+  font-size: 12px;
+  font-weight: 900;
+  flex: 1;
+  text-align: left;
+}
+
+/* Arrow icon */
+.feedback-arrow {
+  font-size: 20px;
+  color:rgba(190,44,430,0.7);
+}
+
+/* Bottom Warning Section */
+.warning-box {
+  background:rgba(0,0,0,0.5);
+  border-radius: 6px;
+  padding: 5px;
+  font-size: 9px;
+  color: #f0f000;
+  font-weight: 600;
+  position: relative;
+  margin: 0px;
+  font-family:Segoe UI;
+  text-align:left;
+  
+}
+
+.warning-box li {
+  list-style: none;
+  margin-left: -35px;
+  margin-bottom: 5px;
+}
+</style>
+
+<!-- Main Section -->
+<div class="deposit-feedback-section">
+
+  <!-- Deposit Feedback Section -->
+  <div class="feedback-card" onclick="window.location.href='feedback.html'">
+    <div class="feedback-icon1" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2dOwmjiwU2zTerue0curEIURyiR3TlSNLydjmzb7OGubX_t_W-DQOxCnhOezLowpee2jvxUb_LZJoz_vXtRJ0LiHMe2llLtQsI67sFPnSML-F489dELhLV5M1IsaL5JzFap8qJjYIf7akkyYwLHK6tM0EZ2NVjSXjvKeGumJELGAigM48YnkcKA1xaeg/s16000/1000110910.png');"></div>
+    <div class="feedback-text">Deposit Feedback</div>
+    <div class="feedback-arrow"><i class="fas fa-angle-right"></i></div>
+  </div>
+
+  <!-- Online Customer Service Section -->
+  <div class="feedback-card" onclick="window.location.href='chat.html'">
+    <div class="feedback-icon" style="background-image: url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjcLCD3aI9TJHWvMYo_FO-C9IhuuEmPI5-AQeTn8n7ScwC3tmfrDpWzu9CosgbLjiNuh-E-r3vyi9CWi9Emcra77H3eRMkgFwNrzPMU4RxmXJWsMRhmFhjn7ZOQRhzcqY78IBH1Ruw8to6H3Le7Sjr8eDhiQbp4-9pDyhHsxqgekgIAMGVZe7iqLZZ2AVA/s16000/1000110907.png');"></div>
+    <div class="feedback-text">Online Customer Service</div>
+    <div class="feedback-arrow"><i class="fas fa-angle-right"></i></div>
+  </div>
+
+  <!-- Warning and Info Section -->
+  <div class="warning-box">
+    <ul>
+      <li>1.Make sure to verify details before submitting deposit.</li>
+      <li>2.Deposit amounts usually credits in just minutes.</li>
+      <li>3.Any problems with deposit, kindly email us at <a href="mailto:kimiapi92@gmail.com" style="color:#fdbd01; font-weight:600;">kimiapi92@gmail.com</a></li>
+    </ul>
+  </div>
+
+</div>
+
+  <!-- PAYMENT MODAL SECTION START -->
+  <div id="appModal" class="modal">
+    <div class="modal-content">
+      <!-- Modal title (dynamic) -->
+      <div class="modal-title" id="appTitle">Payment Window</div>
+      
+      <!-- QR Code Section -->
+      <div class="copy-section">
+        <div class="copy-section-title">SCAN QR CODE TO PAY</div>
+        <div style="text-align: center; margin: 15px 0;">
+          <img id="paymentQr" class="qr-image" src="" alt="Payment QR Code" style="width: 250px; height: 250px; margin: 0 auto;">
+        </div>
+      </div>
+      
+      <!-- Copy UPI Details Section -->
+      <div class="copy-section">
+        <div class="copy-section-title">OR PAY VIA UPI</div>
+        <div class="copy-item">
+          <div class="copy-text"><h5>UPI ID: kimiapi92@oksbi</h5></div>
+          <button class="copy-btn" onclick="copyText('kimiapi92@oksbi')">Copy <i class="fas fa-copy"></i></button>
+        </div>
+      </div>
+
+      <div class="copy-section">
+        <div class="copy-section-title">NOTE</div>
+        <p>Funds will not be added to wallet if incorrect UTR code is submitted</p>
+      </div>
+
+      <!-- UTR code input -->
+      <input type="text" id="reviewBox" class="review-input" placeholder=" Please enter your 12-digit payment UTR code" maxlength="12" pattern="\d{12}" title="Please enter exactly 12 digits" />
+
+      <!-- Submit review button -->
+      <button class="submit-review-btn" onclick="submitReview()">Submit UTR</button>
+      
+      <!-- Certification badges -->
+      <div class="certification-badges">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Seal_of_the_Reserve_Bank_of_India.svg/800px-Seal_of_the_Reserve_Bank_of_India.svg.png" alt="RBI Certified" class="certification-badge">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/NPCI_logo.svg/922px-NPCI_logo.svg.png?20240429065132" alt="NPCI Approved" class="certification-badge">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Government_of_India_logo.svg/500px-Government_of_India_logo.svg.png" alt="100% Secure" class="certification-badge">
+      </div>
+    </div>
+  </div>
+  <!-- PAYMENT MODAL SECTION END -->
+
+  <!-- MESSAGE MODAL SECTION START -->
+  <div id="messageModal" class="messagemodal">
+    <div class="modal-content">
+      <div class="message-modal-title" id="messageTitle">MESSAGE</div>
+      <div id="messageText" style="padding: 15px; text-align: center;"></div>
+      <div id="utrList" class="utr-list" style="display: none;"></div>
+      <button class="close-modal-btn" onclick="closeMessageModal()">Okay</button>
+    </div>
+  </div>
+  <!-- MESSAGE MODAL SECTION END -->
+  
+  <!-- UPDATED DEPOSIT HISTORY MODAL -->
+  <div id="depositHistoryModal" class="deposit-history-modal">
+    <div class="deposit-history-content">
+      <div class="deposit-history-header">
+        <div class="deposit-history-title">DEPOSIT RECORDS</div>
+        <span class="close-history" onclick="closeDepositHistory()"><i class="fas fa-times-circle"></i></span>
+      </div>
+      
+      <!-- Deposit Cards Container -->
+      <div class="deposit-cards-container" id="depositCardsContainer">
+        <!-- Deposit cards will be inserted here -->
+      </div>
+    </div>
+  </div>
+
+<!-- SCRIPT SECTION START -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+<script>
+  // ====================
+  // IMPROVED SOUND SYSTEM
+  // ====================
+  
+  // Audio Context for better performance
+  let audioContext;
+  let isAudioContextInitialized = false;
+  
+  // SFX Pool System
+  const SFX_POOL_SIZE = 5; // Number of audio buffers per sound for concurrent playback
+  const sfxBuffers = {};
+  const sfxPool = {};
+  
+  // Sound URLs
+  const soundUrls = {
+    click: 'https://audio.jukehost.co.uk/dJcPA33b1HQxZbNuq3SCyi9ejzBKXHJM',
+    copy: 'https://audio.jukehost.co.uk/BYniuJVgZDVPXqAsJnbNQQMT2OBggWh2',
+    modalClose: 'https://audio.jukehost.co.uk/4Uj1GPG7G07rx3FJCXKbYLRopwZEvEKj',
+    alert: 'https://audio.jukehost.co.uk/iuYcwaUqqpWDVpLOraOIz0OgqeaZSfT7',
+    success: 'https://audio.jukehost.co.uk/93zIHUwOUTFF1mpNMJlB1c647rqFsgEg'
+  };
+  
+  // Initialize Audio System
+  function initializeAudioSystem() {
+    try {
+      // Create Audio Context
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      isAudioContextInitialized = true;
+      
+      // Preload all sound effects
+      preloadAllSounds();
+      
+      console.log('Audio system initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize audio system:', error);
+      // Fallback to HTML5 Audio
+      initializeFallbackAudio();
+    }
+  }
+  
+  // Fallback to HTML5 Audio if Web Audio API fails
+  let fallbackAudioElements = {};
+  
+  function initializeFallbackAudio() {
+    // Create fallback audio elements for sound effects only
+    for (const [key, url] of Object.entries(soundUrls)) {
+      fallbackAudioElements[key] = new Audio(url);
+      fallbackAudioElements[key].preload = 'auto';
+    }
+  }
+  
+  // Preload all sound effects
+  async function preloadAllSounds() {
+    if (!isAudioContextInitialized) return;
+    
+    for (const [soundName, url] of Object.entries(soundUrls)) {
+      try {
+        // Fetch and decode audio
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        
+        // Store the decoded buffer
+        sfxBuffers[soundName] = audioBuffer;
+        
+        // Initialize pool for this sound
+        sfxPool[soundName] = [];
+        for (let i = 0; i < SFX_POOL_SIZE; i++) {
+          sfxPool[soundName].push({
+            buffer: audioBuffer,
+            source: null,
+            lastPlayed: 0
+          });
+        }
+        
+        console.log(`Preloaded sound: ${soundName}`);
+      } catch (error) {
+        console.error(`Failed to preload sound ${soundName}:`, error);
+      }
+    }
+  }
+  
+  // Play sound effect using pool system
+  function playSound(soundName) {
+    try {
+      if (!isAudioContextInitialized || !sfxPool[soundName]) {
+        // Fallback to HTML5 Audio
+        playFallbackSound(soundName);
+        return;
+      }
+      
+      // Resume audio context if suspended (required by browsers)
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      
+      // Find available sound from pool
+      const pool = sfxPool[soundName];
+      const now = Date.now();
+      
+      // Try to find a sound that's not currently playing
+      for (const sound of pool) {
+        if (!sound.source || sound.source.playbackState === sound.source.FINISHED) {
+          playSoundFromPool(sound);
+          return;
+        }
+      }
+      
+      // If all sounds are playing, use the one that was played least recently
+      let oldestSound = pool[0];
+      for (const sound of pool) {
+        if (sound.lastPlayed < oldestSound.lastPlayed) {
+          oldestSound = sound;
+        }
+      }
+      
+      playSoundFromPool(oldestSound);
+      
+    } catch (error) {
+      console.error('Error playing sound:', error);
+      playFallbackSound(soundName);
+    }
+  }
+  
+  function playSoundFromPool(sound) {
+    sound.source = audioContext.createBufferSource();
+    sound.source.buffer = sound.buffer;
+    sound.source.connect(audioContext.destination);
+    sound.source.start(0);
+    sound.lastPlayed = Date.now();
+    
+    // Clean up when sound finishes
+    sound.source.onended = () => {
+      sound.source = null;
+    };
+  }
+  
+  // Fallback sound playback
+  function playFallbackSound(soundName) {
+    try {
+      const audio = fallbackAudioElements[soundName];
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log('Fallback audio play failed:', e));
+      }
+    } catch (error) {
+      console.error('Fallback sound error:', error);
+    }
+  }
+  
+  // Helper function to load audio buffer
+  async function loadAudioBuffer(url) {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    return await audioContext.decodeAudioData(arrayBuffer);
+  }
+  
+  // ====================
+  // UPDATED APP LOGIC
+  // ====================
+  
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0Ne46PQqmvUnsq89GUJlKfLpWvsHmtbk",
+    authDomain: "kimi-win-90b82.firebaseapp.com",
+    databaseURL: "https://kimi-win-90b82-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "kimi-win-90b82",
+    storageBucket: "kimi-win-90b82.firebasestorage.app",
+    messagingSenderId: "889222798634",
+    appId: "1:889222798634:web:86770b996003152f19d253"
+  };
+
+  // Initialize Firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const database = firebase.database();
+  const auth = firebase.auth();
+
+  // Array holding app links for openApp function
+  let currentAppLinks = [
+    'https://play.google.com/store/apps/details?id=com.mobikwik_new', // Mobikwik
+    'https://play.google.com/store/apps/details?id=com.phonepe.app',  // PhonePe
+    'https://play.google.com/store/apps/details?id=net.one97.paytm',  // Paytm
+    'upi://pay?pa=8099997729-2@axl&pn=******7729&mc=0000&mode=02&purpose=00', // Others
+  ];
+
+  // QR code images for different amounts
+  const amountQrCodes = {
+    50: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrFfD-Wx6SeMWRFANLoKmdwS43wAokxOR-huzVCgd1bB4kej5pu897KEolYSfYAN3MJprInBcOn3OV07DxVQW49Qlrb6eLsN0OX4pxxGnZfTM6oF7G9YeumSM0CpcbwPmO6RoD3yNM9DtIHhn6Kl3blsxfGYn0iOqgpk1-NYPCy5msTZ7YmBF2Ct1BFyM/s500/1000110948.png',
+    100: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTw1NqQBoQHFkX1dmUqnQXbpacC5elZH1fWTELV4pOJW3O52YcQk6deitbyzk6Z-LuNLbdk7hzOvFJVyN6V2mI9-DS10iAn6AaShQX3WvbPg-buOHjMOz8JlcE38Bs8pSL2u9bU36PSn55RV6haGSfUhiUhW3QvFl_XkRUk9G2p0bD6TiYSGk1knrsQZA/s500/1000110949.png',
+    200: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg8KqGRWwe39uYiW2dU7QjDAzUZSukfHouWqhm3Mx51OfnqxDBLaKNkTQSCFszf83gQbraX2kj-ZIL_9-RBjbZqc4pKo7WG1lG2J3_N6N5PQRMz_S-bzuOXkZ4axdkCSGaD9Kkg03GNF_u09t_BPQ6qw9nFP9TuXf3ZbI0O0DWGtdlhk2l5ax16fJmf4pg/s500/1000110950.png',
+    300: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhQgF5dRmar1cE0OrI2Mx1f6M-wSJ4cxaNl1CH_noVEc73YfV2MOx7OV82_4XkMN_pVwg8ZxWLIw4SBbyTuStsMhzXI5FI6ECuxnqS81KPtHfuocw8uzu4HORp-gNsKr7ojDA_0ohb8L8DLkvbDFE7fN10cU5y6WLH2s73-wA8b-wi3sk6KgAhrzwvtw8M/s500/1000110951.png',
+    500: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgCaq9vgV5A2qzn5jrsYizYTDxKWNsi5s_eZg2T2jbECxXlehexeTOFos8Bn_fbH0getosy_oT_Gxa_RSQ_qTrP7BeOkIGVXSKA9VGBvQ5XZAYbsI_RTffWZEoTEYgmlHzDlyy_X107e08i4obo_lm-FIUUjE7-P678JSKVpLl8XpEFIPHW9RWi3XIeTes/s500/1000110953.png',
+    1000: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi1RDsoKnB18cxH38Vfm4f1Tu_kRFikS_FqxPOtmgNv7dMCXp1TiRKJ_nvQi-mFAIucHJ7kBdrxocuY-6F_cych7YEopd2vTW5oh2t4hIQDD0LE1NpACGjdOb8fFPjYZHCx5KHvGFQ4CExm7whq7rzxAEsMYxgKbDD1BJLpDU6vrBJFEpj-pGiLSv-vYKQ/s500/1000110954.png',
+    1500: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjwXL8HTU8zXmALujYSQ0rixGAFAovOp2TlZ3KnJPnEuTNlWrd4rvOUn-nPOWpBWSm9w1Q4JE_IMUSxlg97PofQCoL18FWKmnyK3vACKtD0Uo65yP_AMoFbt5GWJRqwzCb-OgZFrWgCwRVFHAtxzjEa4CkrstAL7e8_8yLRJ_DjQK37M-Vnx6SkHGQ6ooI/s500/1000110952.png',
+    2000: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqh8vaO-ivCTqwWIw8mR59sDEzeUUTNg_1DOt8ALB7iGH0dC1MqfMkiuesD4faHF5zsAfQ780dp7pPJTTngZV8YFK2NORtz66RO0a64OnucK9aNo-uU6YkByMTWz5MTFFPcC1pTppM-rU9alZt2Xu2fxhh4nKCgeHDf6KU8keEE0Rbiu5ak1tTRFwspx0/s500/1000110955.png',
+    5000: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhGujk_awdnPnKLfiMbpwpQvl8luaLBNCANUGoc3zmoHoGVBxnXBjpDzq-glLgRprPWiwiLp0w9xq9gXu6uSxPrmfk6BF5xfdwUTBWgp5sBNHEJXOJaPLf6vU6gedmzRIzHzQqY91_JN8-A21dmhL74DQgQaCu2msttK47MEZqho67dq7C4QQ9uyKmHhGU/s500/1000110958.png',
+    10000: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiA3ZukbTgar31ZarOrEtellt9upPiQsbHJXXLdzQVQGq9mpcwG_OzCyysu2PrLNpzEUXoSBe-mTw6Dz5JQ29cirWhBWtJ-3CvzscEPP8dJCUmMmSBSWbHFcHoVeolt8LuDfbyIxEgCiWyKH2Hceg5AcW3HG5xrl752FHeM_3rwW8K6NJSyyHw5OS0IDZ4/s500/1000110959.png',
+    20000: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhEZvrFhR7t85buX4QPBDB46hKWStlRs37-ooOFnZiRppLLRqt6OijCZEYm-25PbOzjIReYtIsNocTGbaiSBfMZ_ZYevfKeDWIwEgd-nZ7f3zUyeaoNSF_oGrT2mToXc5Ex_whGAPopTx8pVTmDjmWOdgBJByAwQ88-z0K7ekFV8hqN1luF9i4In7FDmCU/s500/1000110960.png',
+    50000: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg_43jrheYGkaWHL6zhf-5Z1QcMGuoVje5eb3AUP5I6WTIjWqG1yY7oNG_eX3dRzmPuCIQ0UODJsIOL0URi_Z17etZDNBswIJiJpnTYCsx7H10tUyWNEy-ewK_4kvUrffUU1uJGh3XbxSl5jszlZwfpqelQQsr-MkaLz0-j5nZ5fkuAkaHkIHPgxqeq70E/s500/1000110961.png'
+  };
+
+  // Universal UPI ID for all amounts
+  const UNIVERSAL_UPI_ID = 'kimiapi92@oksbi';
+
+  // Predefined amounts that have specific QR codes
+  const predefinedAmounts = [50, 100, 200, 300, 500, 1000, 1500, 2000, 5000, 10000, 20000, 50000];
+
+  let currentAmount = 200; // Start with 200 as default
+  let currentQrUrl = ''; // To store current QR URL for download
+  let currentDeposits = []; // To store user's deposit history
+
+  // Function to generate cryptographically secure random digits
+  function generateSecureRandomDigits(length) {
+    const array = new Uint8Array(length);
+    crypto.getRandomValues(array);
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += array[i] % 10; // Convert to digit 0-9
+    }
+    return result;
+  }
+
+  // Function to generate Transaction ID (18 characters: DOR + 12 random digits + day of month)
+  function generateTransactionId() {
+    // Generate 12 cryptographically secure random digits
+    const randomDigits = generateSecureRandomDigits(12);
+    
+    // Get current day of month (01-31)
+    const now = new Date();
+    const dayOfMonth = now.getDate().toString().padStart(2, '0');
+    
+    // Combine to form 18-character Transaction ID
+    return `DOR${randomDigits}${dayOfMonth}`;
+  }
+
+  // Check if user is signed in
+  function checkAuth() {
+    return new Promise((resolve, reject) => {
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          resolve(user);
+        } else {
+          reject(new Error('User not authenticated'));
+          window.location.href = 'index.html';
+        }
+      });
+    });
+  }
+
+  // Function to calculate bonus amount (₹2.5 for every ₹50)
+  function calculateBonus(amount) {
+    // Calculate bonus: every ₹50 gets ₹2.5 bonus
+    const bonus = (amount / 50) * 2.5;
+    return Math.round(bonus * 100) / 100; // Round to 2 decimal places
+  }
+
+  // Function to select amount from buttons
+  function selectAmount(amount) {
+    playSound('click');
+    
+    // Remove selected class from all buttons
+    const buttons = document.querySelectorAll('.amountoptions');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    
+    // Add selected class to clicked button
+    event.target.classList.add('selected');
+    
+    // Update amount input
+    document.getElementById('amountbox').value = amount;
+    
+    // Update amount display and details
+    updateAmountDetails(amount);
+    
+    // Clear any error messages
+    document.getElementById('amountError').style.display = 'none';
+  }
+
+  // Function to validate custom amount input
+  function validateCustomAmount() {
+    const amountInput = document.getElementById('amountbox');
+    const amountError = document.getElementById('amountError');
+    const amount = parseInt(amountInput.value);
+    
+    // Remove selected class from all buttons
+    const buttons = document.querySelectorAll('.amountoptions');
+    buttons.forEach(btn => btn.classList.remove('selected'));
+    
+    if (isNaN(amount)) {
+      amountError.textContent = 'Please enter a valid amount';
+      amountError.style.display = 'block';
+      resetAmountDetails();
+      return false;
+    }
+    
+    if (amount < 50 || amount > 50000) {
+      amountError.textContent = 'Amount must be between ₹50 and ₹50000';
+      amountError.style.display = 'block';
+      resetAmountDetails();
+      return false;
+    }
+    
+    if (amount % 50 !== 0) {
+      amountError.textContent = 'Amount must be in multiples of ₹50';
+      amountError.style.display = 'block';
+      resetAmountDetails();
+      return false;
+    }
+    
+    // Clear error if validation passes
+    amountError.style.display = 'none';
+    
+    // Update amount display and details
+    updateAmountDetails(amount);
+    
+    return true;
+  }
+
+  // Function to update amount details display
+  function updateAmountDetails(amount) {
+    currentAmount = amount;
+    
+    // Update amount display
+    document.getElementById('selectedAmountDisplay').textContent = `Selected Amount: ${amount}`;
+    
+    // Update amount cards
+    document.getElementById('depositamount').textContent = `${amount.toFixed(2)}`;
+    
+    // Calculate and update bonus
+    const bonusAmount = calculateBonus(amount);
+    document.getElementById('bonusamount').textContent = `${bonusAmount.toFixed(2)}`;
+  }
+
+  // Function to reset amount details
+  function resetAmountDetails() {
+    currentAmount = 0;
+    document.getElementById('selectedAmountDisplay').textContent = 'Selected Amount: 0';
+    document.getElementById('depositamount').textContent = '0.00';
+    document.getElementById('bonusamount').textContent = '0.00';
+  }
+
+  // Function to open deposit modal
+  function openDepositModal() {
+    playSound('click');
+    
+    // Check if amount is selected/valid
+    if (currentAmount === 0 || currentAmount < 50 || currentAmount > 50000) {
+      showMessage('Please select or enter a valid amount between ₹50 and ₹50000');
+      return;
+    }
+    
+    // Validate amount is multiple of 50
+    if (currentAmount % 50 !== 0) {
+      showMessage('Amount must be in multiples of ₹50 (e.g., 50, 100, 150, etc.)');
+      return;
+    }
+    
+    checkAuth().then(user => {
+      // Update modal title
+      document.getElementById('appTitle').textContent = `Payable Amount: ₹${currentAmount}`;
+      
+      // Set QR code based on amount
+      if (predefinedAmounts.includes(currentAmount) && amountQrCodes[currentAmount]) {
+        // Use predefined QR code for specific amounts
+        currentQrUrl = amountQrCodes[currentAmount];
+      } else {
+        // Generate QR code URL for custom amounts
+        // Using the same QR code for all amounts as per requirement
+        currentQrUrl = 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjfsfEFOY0tOTtp-eJFUUjZ2cDYyFDna-91Gu421llz_3esGgM4q3PT9jJqx8QLlA6pl2GIGbsrZE-o03UKqkHR9j3AlbodUit6G2aVR97kZ-djMUS9XA3N4HgstLmh3pdHqtnT3M_ApmjG6sG6FY28XPRwdzExjBX_ZcgyClooGwHGM-546YVPBXFZjSo/s500/1000110947.png';
+      }
+      
+      // Set QR code image
+      document.getElementById('paymentQr').src = currentQrUrl;
+      
+      // Show modal
+      document.getElementById('appModal').style.display = 'block';
+      
+    }).catch(error => {
+      showMessage('Please login to make a deposit');
+      console.error(error);
+    });
+  }
+
+  // Function to close the modal
+  function closeModal() {
+    playSound('modalClose');
+    document.getElementById('appModal').style.display = 'none';
+    document.getElementById('reviewBox').value = '';
+  }
+
+  // Function to display messages in the custom modal
+  function showMessage(message, showUtrList = false) {
+    if (message.toLowerCase().includes('success') || message.includes('credited') || message.includes('approved')) {
+      playSound('success');
+    } else if (message.toLowerCase().includes('please') || message.toLowerCase().includes('error') || message.toLowerCase().includes('failed')) {
+      playSound('alert');
+    } else {
+      playSound('click');
+    }
+    
+    document.getElementById('messageText').innerText = message;
+    document.getElementById('messageTitle').innerText = showUtrList ? 'UTR record' : 'alert';
+    document.getElementById('utrList').style.display = showUtrList ? 'block' : 'none';
+    document.getElementById('messageModal').style.display = 'block';
+  }
+
+  // Function to close the message modal
+  function closeMessageModal() {
+    playSound('modalClose');
+    document.getElementById('messageModal').style.display = 'none';
+    document.getElementById('utrList').style.display = 'none';
+  }
+
+  // Close modals when clicking outside the content box
+  window.onclick = function (event) {
+    const modal = document.getElementById('appModal');
+    const messageModal = document.getElementById('messageModal');
+    const qrModal = document.getElementById('qrModal');
+    const fullscreenQrModal = document.getElementById('fullscreenQrModal');
+    const depositHistoryModal = document.getElementById('depositHistoryModal');
+    
+    if (event.target === modal) {
+      closeModal();
+    } else if (event.target === messageModal) {
+      closeMessageModal();
+    } else if (event.target === qrModal) {
+      closeQrModal();
+    } else if (event.target === fullscreenQrModal) {
+      closeFullscreenQr();
+    } else if (event.target === depositHistoryModal) {
+      closeDepositHistory();
+    }
+  };
+
+  // Function to copy text to clipboard
+  function copyText(text) {
+    playSound('copy');
+    navigator.clipboard.writeText(text).then(() => {
+      const copyBtn = event.target;
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.classList.remove('copied');
+      }, 2000);
+      showMessage('UPI ID copied to clipboard!');
+    });
+  }
+
+  // Function to sync deposit request with Firebase
+  function syncWithFirebase(utr, uid, amount) {
+    return new Promise((resolve, reject) => {
+      // Generate Transaction ID
+      const transactionId = generateTransactionId();
+      
+      // Calculate bonus for every deposit (new logic)
+      const bonusAmount = calculateBonus(amount);
+      
+      const depositRef = database.ref('depositRequests').push();
+      const depositData = {
+        uid: uid,
+        utr: utr,
+        amount: amount,
+        bonusAmount: bonusAmount,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        status: 'pending',
+        processed: false, // Add processed flag to prevent double crediting
+        transactionId: transactionId // Add the generated transaction ID
+      };
+      
+      depositRef.set(depositData)
+        .then(() => {
+          playSound('success');
+          showMessage('Deposit request submitted successfully! Funds will be credited to your wallet very soon.');
+          resolve();
+        })
+        .catch(error => {
+          console.error('Firebase sync failed:', error);
+          reject(error);
+        });
+    });
+  }
+
+  // Function to view deposit history with status
+  function viewDepositHistory() {
+    playSound('click');
+    checkAuth().then(user => {
+      // Show loading message
+      showMessage('Loading deposit history...');
+      
+      // Get deposit history from Firebase
+      database.ref('depositRequests').orderByChild('uid').equalTo(user.uid).once('value')
+        .then((snapshot) => {
+          currentDeposits = [];
+          snapshot.forEach((childSnapshot) => {
+            const deposit = childSnapshot.val();
+            currentDeposits.push({
+              id: deposit.transactionId || childSnapshot.key, // Use transactionId if available
+              amount: deposit.amount,
+              utr: deposit.utr,
+              status: deposit.status || 'pending',
+              bonusAmount: deposit.bonusAmount || 0,
+              timestamp: deposit.timestamp ? new Date(deposit.timestamp).toLocaleString() : 'N/A'
+            });
+          });
+          
+          if (currentDeposits.length === 0) {
+            showMessage('No deposit history found');
+            return;
+          }
+          
+          // Sort by timestamp (newest first)
+          currentDeposits.sort((a, b) => {
+            if (a.timestamp < b.timestamp) return 1;
+            if (a.timestamp > b.timestamp) return -1;
+            return 0;
+          });
+          
+          // Display in deposit history modal
+          displayDepositsAsCards();
+          document.getElementById('messageModal').style.display = 'none';
+          document.getElementById('depositHistoryModal').style.display = 'block';
+        })
+        .catch((error) => {
+          console.error('Error getting deposit history:', error);
+          showMessage('Failed to load deposit history. Please try again later.');
+        });
+    }).catch(error => {
+      showMessage('Please login to view deposit history');
+    });
+  }
+
+  // Function to display deposits as cards
+  function displayDepositsAsCards() {
+    const cardsContainer = document.getElementById('depositCardsContainer');
+    cardsContainer.innerHTML = '';
+    
+    // Show ALL deposits without filtering
+    if (currentDeposits.length === 0) {
+      cardsContainer.innerHTML = `
+        <div class="empty-deposit">
+          <i class="fas fa-inbox"></i>
+          <div>No deposits found</div>
+        </div>
+      `;
+    } else {
+      currentDeposits.forEach(deposit => {
+        let statusClass = '';
+        let statusText = '';
+        switch(deposit.status) {
+          case 'pending':
+            statusClass = 'status-pending';
+            statusText = 'Pending';
+            break;
+          case 'processing':
+            statusClass = 'status-processing';
+            statusText = 'Processing';
+            break;
+          case 'approved':
+          case 'success':
+            statusClass = 'status-success';
+            statusText = 'Success';
+            break;
+          case 'failed':
+            statusClass = 'status-failed';
+            statusText = 'Failed';
+            break;
+          default:
+            statusClass = 'status-pending';
+            statusText = 'Pending';
+        }
+        
+        const card = document.createElement('div');
+        card.className = 'deposit-card';
+        card.innerHTML = `
+          <div class="card-row">
+            <div class="amount-section">₹${deposit.amount}</div>
+            <div class="status-section ${statusClass}">${statusText}</div>
+          </div>
+          <div class="card-row">
+            <div class="code-section">
+              ${deposit.utr}
+              <button class="copy-btn-small" onclick="playSound('copy'); navigator.clipboard.writeText('${deposit.utr}')">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+            <div class="code-section">
+              ${deposit.id.length > 18 ? deposit.id.substring(0, 18) : deposit.id}
+              <button class="copy-btn-small" onclick="playSound('copy'); navigator.clipboard.writeText('${deposit.id}')">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+          </div>
+          <div class="card-row bottom-section">
+            <div class="datetime">${deposit.timestamp}</div>
+            <button class="support-btn" onclick="playSound('click'); contactSupport('${deposit.id}')">
+              <i class="fas fa-headset"></i> Support
+            </button>
+          </div>
+        `;
+        
+        cardsContainer.appendChild(card);
+      });
+    }
+  }
+
+  // Function to close deposit history modal
+  function closeDepositHistory() {
+    playSound('modalClose');
+    document.getElementById('depositHistoryModal').style.display = 'none';
+  }
+
+  // Function to contact support
+  function contactSupport(transactionId) {
+    playSound('click');
+    window.location.href = `chat.html`;
+  }
+
+  // Function to submit UTR review through WhatsApp and Firebase
+  function submitReview() {
+    playSound('click');
+    checkAuth().then(user => {
+      const reviewText = document.getElementById('reviewBox').value.trim();
+      
+      if (reviewText === '') {
+        showMessage('Please enter the UTR code before submitting!');
+        return;
+      }
+      
+      // Validate that it's exactly 12 digits
+      if (!/^\d{12}$/.test(reviewText)) {
+        showMessage('Please enter a valid UTR code!');
+        return;
+      }
+
+      // Sync with Firebase
+      syncWithFirebase(reviewText, user.uid, currentAmount)
+        .then(() => {
+          document.getElementById('reviewBox').value = '';
+          closeModal();
+          resetAmountDetails();
+          
+          // Reset amount selection
+          const buttons = document.querySelectorAll('.amountoptions');
+          buttons.forEach(btn => btn.classList.remove('selected'));
+          document.getElementById('amountbox').value = '';
+        })
+        .catch(error => {
+          showMessage('Failed to submit UTR. Please try again later.');
+          console.error('Error submitting UTR:', error);
+        });
+    }).catch(error => {
+      showMessage('Please login to submit UTR');
+    });
+  }
+
+  // Listen for deposit status updates
+  function setupDepositStatusListener() {
+    checkAuth().then(user => {
+      database.ref('depositRequests').orderByChild('uid').equalTo(user.uid).on('child_changed', (snapshot) => {
+        const deposit = snapshot.val();
+        const depositId = snapshot.key;
+        
+        // Only process if status is approved/success AND not already processed
+        if ((deposit.status === 'approved' || deposit.status === 'success') && !deposit.processed) {
+          // Show notification if user is on the page
+          showMessage(`Deposit of ₹${deposit.amount} has been approved and has been credited to your wallet successfully!`);
+        }
+      });
+    }).catch(error => {
+      console.error('Error setting up deposit listener:', error);
+    });
+  }
+
+  // Initialize the deposit status listener when page loads
+  window.addEventListener('load', setupDepositStatusListener);
+  
+  // Initialize amount validation on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    // Set up input validation
+    const amountInput = document.getElementById('amountbox');
+    amountInput.addEventListener('blur', validateCustomAmount);
+    
+    // Set up enter key to trigger deposit
+    amountInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        validateCustomAmount();
+      }
+    });
+    
+    // Set default amount to 200
+    amountInput.value = 200;
+    updateAmountDetails(200);
+    
+    // Initialize audio system for sound effects only
+    setTimeout(initializeAudioSystem, 1000);
+  });
+</script>
+</body>
+</html>

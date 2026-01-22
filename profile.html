@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings | Kimi Corporation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <style>
+    /* Disable text selection */
+    * {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    :root {
+      --primary: #00ff88;
+      --primary-dark: #00cc6a;
+      --secondary: #00a2ff;
+      --accent: #ff00e6;
+      --accent-dark: #cc00b8;
+      --success: #00ff95;
+      --danger: #ff2a6d;
+      --warning: #ffd166;
+      --light: #f8f9fa;
+      --dark: #0a0a14;
+      --gray: #6c757d;
+      --white: #ffffff;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s ease;
+      --glow: 0 0 15px rgba(0, 255, 136, 0.7);
+      --glow-accent: 0 0 15px rgba(255, 0, 230, 0.7);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqAH5Ey4XWbcSHVzo3LwL0vzQRzjWS2Oic8DU_EzuSKxY4AsyeUjbXzhusBKQBaTB9sKjVcRkgdaqV7SYkYGlDBs9LFlX_mwkFnHIqrzqWVpLlClfEUcSdkRUPKMGoOoqeOklcb8-21PPyix41oPlPHrX13OeMXIgwuTn-5mWFNasamd-OYS3eX_CF46Q/s16000/1000108747.webp");
+      background-size: 100% 100%;
+      font-family: 'Exo 2', sans-serif;
+      background-size: 100% 100%;
+      display: flex;
+      padding: 0px;
+      align-content: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #ffffff;
+    }
+
+    .profile-container {
+      border-radius: 25px;
+      width: 100%;
+      max-width: 1200px;
+      min-height: 70vh;
+      overflow: hidden;
+      position: relative;
+      transition: var(--transition);
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      background: rgba(108, 10, 209, 0.3);
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(1px);
+      border: 2px solid rgba(176, 16, 198, 0.9);
+      outline:1px solid rgba(158,55,327,0.9);
+      box-shadow: 
+        0 0 30px rgba(128, 55, 186, 0.7),
+        inset 0 0 15px rgba(138, 55, 536, 0.7);
+      z-index: 1;
+    }
+
+    .profile-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(136deg, rgba(176, 25, 186, 0.1) 0%, transparent 30%, transparent 70%, rgba(255, 0, 230, 0.1) 100%);
+      border-radius: 25px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .profile-header {
+      background: linear-gradient(180deg, rgba(178, 25, 198, 0.2) 0%, rgba(176, 16, 255, 0.2) 100%);
+      color: #ffffff;
+      font-family: 'Orbitron', sans-serif;
+      padding: 10px;
+      text-align: center;
+      position: sticky;
+      border-radius: 25px 25px 0 0;
+      overflow: hidden;
+      font-size: 10px;
+      border-bottom: 2.5px solid rgba(178,16,198,0.9);
+    }
+
+    .profile-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 500%;
+      height: 500%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+      opacity: 0.5;
+    }
+
+    .profile-header h1 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      position: relative;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+      letter-spacing: 1px;
+    }
+
+    .profile-header p {
+      font-size: 12px;
+      opacity: 0.9;
+      position: relative;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      transform: translateZ(0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      box-shadow: 
+        0 0 25px rgba(178, 25, 186, 0.5),
+        inset 0 0 20px rgba(176, 35, 196, 0.2);
+      border: 5px solid rgba(258,150,0,0.9);
+      position: relative;
+      transition: all 0.5s ease;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/9203/9203764.png');
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 0 35px rgba(0, 255, 136, 0.8),
+        inset 0 0 25px rgba(0, 255, 136, 0.3);
+    }
+
+    .edit-avatar-btn {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #893BFF, #5539CC);
+      border: 2px solid #fdbd01;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      z-index: 2;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .edit-avatar-btn:hover {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #5539CC, #893BFF);
+    }
+
+    .edit-avatar-btn:active {
+      transform: scale(0.95);
+    }
+
+    .profile-avatar img {
+      width: 60px;
+      height: 60px;
+      color: white;
+    }
+
+    .profile-body {
+      padding: 0px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin:-15px;
+    }
+
+    .profile-tabs {
+      display: flex;
+      margin-bottom: 5px;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      background-size: 100% 100%;
+      border: 1px solid rgba(210, 25, 226, 0.3);
+      padding: 0px;
+      position: relative;
+      font-size: 10px;
+      height:40px;
+      overflow: hidden;
+    }
+
+    .profile-tabs::before {
+      content: '';
+      position: absolute;
+      top: 3.5px;
+      left: 3px;
+      width: calc(50% - 5px);
+      height: calc(100% - 10px);
+      background: linear-gradient(135deg, rgba(178, 25, 196, 0.3) 0%, rgba(189, 162, 255, 0.3) 100%);
+      border: 1px solid rgba(190, 25, 289, 0.5);
+      border-radius: 20px;
+      background-size: 100% 100%;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 0;
+      box-shadow: 0 0 5px rgba(176, 25, 136, 0.3);
+    }
+
+    .profile-tabs.tab-2::before {
+      transform: translateX(100%);
+    }
+
+    .profile-tab {
+      padding: 12px 25px;
+      cursor: pointer;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      flex: 1;
+      transition: all 0.3s ease;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    .profile-tab.active {
+      color: #ffffff;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+    }
+
+    .profile-content {
+      display: none;
+      animation: fadeIn 0.5s ease;
+      flex: 1;
+    }
+
+    .profile-content.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .info-card {
+      background: rgba(0, 0, 0, 0.7);
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding-top: 1px;
+      padding-bottom: 10px;
+      padding-left: 10px;
+      padding-right: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 5px 10px rgba(178, 20, 188, 0.3);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(210, 25, 226, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .bank{
+        padding-top: 15px;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+
+    .info-card h3 {
+      font-size: 10px;
+      margin-bottom: 10px;
+      color: var(--primary);
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.5px;
+    }
+
+    .info-card h3 i {
+      margin-right: 10px;
+      color: var(--primary);
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      padding-bottom: 5px;
+      border-bottom: 1px dashed rgba(0, 255, 136, 0.2);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .info-label {
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+      font-family: 'Exo 2', sans-serif;
+    }
+
+    .info-value {
+      font-size: 8px;
+      color: white;
+      font-weight: 500;
+      text-align: right;
+      font-family: 'Exo 2', sans-serif;
+    }
+
+    .info-value.copyable {
+      cursor: pointer;
+      position: relative;
+      padding-right: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .info-value.copyable::after {
+      content: '\f0c5';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+
+    .info-value.copyable:hover {
+      color: var(--primary);
+      text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+    }
+
+    .info-value.copyable:hover::after {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .bank-details-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 8px;
+      font-weight: 500;
+      font-family: 'Exo 2', sans-serif;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px 10px 8px 40px;
+      background: rgba(20, 20, 30, 0.7);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 8px;
+      font-family: 'Exo 2', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      transition: var(--transition);
+      color: white;
+    }
+
+    .form-control:focus {
+      border-color: rgba(0, 255, 136, 0.8);
+      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
+      outline: none;
+      background: rgba(20, 20, 30, 0.9);
+    }
+
+    .form-icon {
+      position: absolute;
+      left: 15px;
+      top: 22px;
+      color: rgba(0, 255, 136, 0.7);
+      font-size: 14px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: none;
+      width: 90%;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+      align-self: center;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #0a0a14;
+      box-shadow: 
+        0 0 8px rgba(0, 255, 136, 0.5),
+        inset 0 0 20px rgba(100, 995, 536, 0.4);
+      border:1.5px solid black;
+      outline: 1px solid var(--success);
+    }
+
+    .btn-primary:hover {
+      transform: scale(1);
+      box-shadow: 0 2px 4px rgba(0, 255, 136, 0.6);
+    }
+    .btn-primary:active {
+      transform: scale(0.95);
+    }
+
+    .btn-danger {
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrzXWlJoSkI8I_mEDO5rpKez1kydzqUpjsDqKkPW-bvgLGTIY154DX-96VEN8zuOo_DUcTQztVKPzxyDZkDxSiV6Ahts9eu4L7yDpA_7p3Z6X7qJLGAREQMckePMfKj7jGPacMPiIhm0VkLE8kFuH4Mg5NCBc5NvQKl_KqW4qETcOAaoG1YbgFVzNqKJw/s16000/1000108763.png");
+      color:black;
+      background-size: 100% 100%;
+      border:none;
+    }
+
+    .btn-danger:hover {
+      transform: scale(1);
+    }
+    .btn-danger:active {
+      transform: scale(0.95);
+    }
+
+    .balance-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .balance-card {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding-left: 20px;
+      padding-top:10px;
+      padding-bottom: 10px;
+      box-shadow: 
+        0 0 2px rgba(178, 25, 198, 0.5),
+        inset 0 0 30px rgba(220, 12, 266, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(210, 25, 199, 0.2);
+      border-radius: 15px;
+    }
+
+    .balance-card:hover {
+      transform: scale(1);
+      box-shadow: 
+        0 0 2px rgba(200, 15, 236, 0.5),
+        inset 0 0 50px rgba(190, 25, 236, 0.2);
+    }
+    .balance-card:active{
+        transform: scale(0.96);
+    }
+
+    .balance-card h3 {
+      font-size: 9px;
+      color: rgba(187,33,198,0.99);
+      margin-bottom: 5px;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.5px;
+    }
+
+    .balance-card h3 i {
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    .balance-amount {
+      font-size: 15px;
+    font-weight: 900;
+    font-family: serif;
+    background: linear-gradient(0deg, #fdbd01, #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+     -webkit-text-stroke:.5px #fdbd01;
+    }
+
+    .balance-subtext {
+      font-size: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'Exo 2', sans-serif;
+    }
+
+    /* Toggle sections */
+    .toggle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 10px 0;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-header:hover {
+      color: var(--primary);
+    }
+
+    .toggle-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0s;
+    }
+
+    .toggle-content.expanded {
+      max-height: 500px;
+    }
+
+    .toggle-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .toggle-icon.expanded {
+      transform: rotate(180deg);
+    }
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  top:0;
+  background: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEipgOY-Cw-VRJjAepn2qfsUfVBXmOLW43hwo2d-Te9CG9O7U6inSiYFr-7wWfOkpJG7mZk_W0yz6gDnDXy3EW9qkfI6lJ9Lo0d_Va5SzzWTPF2otmaIZLjILvWtrrDQofej8rcayaSfKjbTzU3XrAd5L4EYmWT5rqlWF5oMwYCZ7O6mn1bYdRCzRPDPqpI/s16000/1000100381.png");
+  background-size: 100% 100%;
+  min-height: 50px;
+  max-height: 100px;
+  min-width: 80vw;
+  max-width: 90vw;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 10px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.99);
+  font-family: 'Exo 2', sans-serif;
+  padding: 10px;
+  padding-top: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transform: translateY(-150%);
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: none;
+}
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast i {
+      margin-right: 10px;
+      font-size: 14px;
+    }
+
+    .toast.success {
+      border-left-color: var(--success);
+    }
+
+    .toast.error {
+      border-left-color: var(--danger);
+    }
+
+    .toast.warning {
+      border-left-color: var(--warning);
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 0px;
+      height: 0px;
+      margin: 0 auto;
+      border: 0px solid rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      border-top: 0px solid var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .profile-container {
+        margin: 10px;
+      }
+      
+      .profile-header {
+        padding: 20px;
+      }
+      
+      .profile-body {
+        padding: 20px;
+      }
+      
+      .balance-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .profile-container {
+        flex-direction: row;
+        min-height: 600px;
+      }
+      
+      .profile-header {
+        width: 300px;
+        border-radius: 25px 0 0 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      
+      .profile-body {
+        flex: 1;
+        padding: 40px;
+      }
+      
+      .profile-avatar {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .profile-avatar img {
+        width: 70px;
+        height: 70px;
+      }
+    }
+
+    /* Animation Enhancements */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .back-button {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      padding: 5px;
+      background: rgba(15, 15, 25, 0.8);
+      color: var(--primary);
+      outline: 1px solid rgba(0, 255, 136, 0.3);
+      border:5px solid rgba(15,35,40,0.4);
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      text-decoration: none;
+      padding-left: 7px;
+      width: 40px;
+      height: 40px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-button:hover {
+      transform: scale(1.01);
+      box-shadow: 0 2px 2px rgba(0, 255, 136, 0.4);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .back-button:active {
+      transform: scale(0.95);
+    }
+
+    .records-button {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 5px;
+      background: rgba(15, 15, 25, 0.8);
+      color: var(--primary);
+      outline: 1px solid rgba(0, 255, 136, 0.3);
+      border:5px solid rgba(15,35,40,0.4);
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 900;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      text-decoration: none;
+      width: 40px;
+      height: 40px;
+      backdrop-filter: blur(1px);
+      -webkit-backdrop-filter: blur(1px);
+    }
+
+    .records-button:hover {
+      transform: scale(1.01);
+      box-shadow: 0 2.5px 5px rgba(0, 255, 136, 0.4);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .records-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Profile Modal Styles (Copied from invest page) */
+    .profile-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        display: none;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-modal {
+        width: 90vw;
+        height: 52vh;
+        background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhGe3WgsbvnCdJXLdGZAescdudEW63wqeUPeEt6MVzzmMOlIhtuvy_WRMRcgYhITP7pAS77HSjIAwbefd9ICFMbiumHgGdQGBm4o8bo2vNBEK-X1bxiNfeotblkzdeCg4MymNIu2hRFyX6a04Gwq747jRX0svJk6Y7nl00UMTGTXJ0iukHswVckpLVFKzI/s16000/1000108744.jpg");
+        background-size: 100% 100%;
+        border-radius: 12px;
+        border: 2px solid #fdbd01;
+        outline: 3px solid #893BFF;
+        padding: 15px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .profile-pic-section {
+        text-align: center;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .current-profile-pic {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid #fdbd01;
+        object-fit: cover;
+        margin-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-pic-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-top: 5px;
+        background:rgba(0,0,0,0.7);
+        padding:5px 10px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-pic-option {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid rgba(62,11,55,0.7);
+        cursor: pointer;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-pic-option.selected {
+        border-color: #fdbd01;
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+    
+    .profile-pic-option:hover {
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+    
+    .local-gallery-btn {
+        height:40px;
+        width:45px;
+        background:url("https://cdn-icons-png.flaticon.com/128/5004/5004111.png");
+        background-size: 100% 100%;
+        border-radius: 0px;
+        border:none;
+        font-weight: 900;
+        font-family: fantasy;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 10px;
+    }
+    
+    .local-gallery-btn:hover {
+        transform: scale(1);
+    }
+    .local-gallery-btn:active{
+        transform:scale(0.9);
+    }
+    
+    .profile-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .profile-input-label {
+        font-size: 10px;
+        color: white;
+        font-weight: 900;
+        font-family: fantasy;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.99);
+    }
+    
+    .profile-input {
+        background:rgba(0,0,0,0.4);
+        border: 1px solid rgba(122,33,444,0.5);
+        border-radius: 4px;
+        padding: 5px 8px;
+        color: white;
+        font-family:Segoe UI;
+        font-size: 12px;
+        text-align: center;
+        outline:none;
+         -webkit-text-stroke:.5px #fdbd01;
+    }
+    
+    .profile-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 5px;
+    }
+    
+    .save-profile-btn {
+        flex: 1;
+        background: #fd9f00;
+        color: black;
+        border:2px solid #fdbd01;
+        outline:2px solid transparent;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-weight: 900;
+        font-family:Segoe UI;
+        cursor: pointer;
+        font-size: 12px;
+        box-shadow: inset 0 3px 6px rgba(255, 255, 255, 0.6);
+    }
+    
+    .cancel-profile-btn {
+        flex: 1;
+        background: #ff4d4d;
+        color: black;
+        border:2px solid #fdbd01;
+        outline:2px solid transparent;
+        padding:6px 10px;
+        border-radius: 20px;
+        font-weight: 900;
+        font-family:Segoe UI;
+        cursor: pointer;
+        font-size: 12px;
+        box-shadow: inset 0 3px 6px rgba(255, 255, 255, 0.3);
+    }
+    
+    .save-profile-btn:hover {
+        transform: scale(1);
+    }
+    .save-profile-btn:Active{
+        transform:scale(0.95);
+    }
+    
+    .cancel-profile-btn:hover {
+        transform: scale(1);
+    }
+    .cancel-profile-btn:active{
+        transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-button" href="home.html">
+    <i class="fas fa-angle-left"></i>
+  </a>
+  <a class="records-button" onclick="window.location.href='withdraw.html'">
+    <i class="fas fa-university"></i> 
+  </a>
+
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-avatar floating" id="profileAvatar">
+        <button class="edit-avatar-btn" onclick="showProfileModal()">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+      </div>
+      <h1 id="userGreeting">Welcome</h1>
+      <p id="userEmailDisplay">Loading...</p>
+    </div>
+
+    <div class="profile-body">
+      <div class="profile-tabs" id="profileTabs">
+        <div class="profile-tab active" onclick="showTab('profile')">Profile Info</div>
+        <div class="profile-tab" onclick="showTab('bank')">Bank Details</div>
+      </div>
+
+      <div id="profile" class="profile-content active">
+        <div class="balance-cards">
+          <div class="balance-card">
+            <h3><i class="fas fa-wallet"></i> Total Available Balance</h3>
+            <div class="balance-amount" id="totalBalance">₹0.00</div>
+          </div>
+          
+          <div class="balance-card">
+            <h3><i class="fas fa-gift"></i> Total Referral Earnings</h3>
+            <div class="balance-amount" id="referralEarnings">₹0.00</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="toggle-header" onclick="toggleSection('accountInfo')">
+            <h3><i class="fas fa-user-circle"></i> Account Information</h3>
+            <i class="fas fa-chevron-down toggle-icon" id="accountInfoIcon"></i>
+          </div>
+          <div class="toggle-content" id="accountInfoContent">
+            <div class="info-row">
+              <span class="info-label">Email Address</span>
+              <span class="info-value" id="infoEmail">loading...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Account Status</span>
+              <span class="info-value" id="accountStatus">loading...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Member Since</span>
+              <span class="info-value" id="memberSince">loading...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="toggle-header" onclick="toggleSection('referralInfo')">
+            <h3><i class="fas fa-share-alt"></i> Referral Information</h3>
+            <i class="fas fa-chevron-down toggle-icon" id="referralInfoIcon"></i>
+          </div>
+          <div class="toggle-content" id="referralInfoContent">
+            <div class="info-row">
+              <span class="info-label">Your Referral Code</span>
+              <span class="info-value copyable" id="referralCode" onclick="copyToClipboard('referralCode')">loading...</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Invited By</span>
+              <span class="info-value" id="referredBy">Not referred</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Total Affiliates</span>
+              <span class="info-value" id="totalReferrals">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="bank" class="profile-content">
+        <div class="info-card bank">
+          <h3><i class="fas fa-university"></i> Bank Account Details</h3>
+          
+          <form class="bank-details-form" id="bankForm">
+            <div class="form-group">
+              <label for="accountName">Account Holder Name</label>
+              <i class="fas fa-user-alt form-icon"></i>
+              <input type="text" id="accountName" class="form-control" placeholder="Enter account holder name">
+            </div>
+            
+            <div class="form-group">
+              <label for="accountNumber">Account Number</label>
+              <i class="fas fa-credit-card form-icon"></i>
+              <input type="text" id="accountNumber" class="form-control" placeholder="Enter account number">
+            </div>
+            
+            <div class="form-group">
+              <label for="bankName">Bank Name</label>
+              <i class="fas fa-university form-icon"></i>
+              <input type="text" id="bankName" class="form-control" placeholder="Enter bank name">
+            </div>
+            
+            <div class="form-group">
+              <label for="ifscCode">IFSC Code</label>
+              <i class="fas fa-code form-icon"></i>
+              <input type="text" id="ifscCode" class="form-control" placeholder="Enter IFSC code">
+            </div>
+            
+            <button type="button" class="btn btn-primary" onclick="saveBankDetails()">Save Bank Details
+              <div class="spinner" id="saveSpinner"></div>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <button class="btn btn-danger" onclick="logout()">logout</button>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="profile-modal-overlay" id="profileModalOverlay">
+    <div class="profile-modal">
+      <div class="profile-form" id="profileForm">
+        <!-- Profile Picture Section -->
+        <div class="profile-pic-section">
+          <img id="currentProfilePic" class="current-profile-pic" src="https://cdn-icons-png.flaticon.com/512/9203/9203764.png" alt="Profile Picture">
+          <!-- Name -->
+          <div class="profile-input-group">
+            <input type="text" class="profile-input" id="profileName" placeholder="Enter your name">
+          </div>
+          <div class="profile-pic-grid" id="profilePicGrid">
+            <!-- Profile pictures will be populated by JavaScript -->
+          </div>
+          
+          <button class="local-gallery-btn" onclick="openLocalGallery()"></button>
+          <input type="file" id="localGalleryInput" accept="image/*" style="display: none;" onchange="handleGalleryImage(event)">
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="profile-buttons">
+          <button class="save-profile-btn" onclick="saveProfile()">Save Changes</button>
+          <button class="cancel-profile-btn" onclick="closeProfileModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-message">Success message</span>
+  </div>
+
+<script>
+    // ====================== SOUND EFFECTS ====================== //
+    // SoundPool implementation for low latency audio playback
+    class SoundPool {
+        constructor(maxSize = 10) {
+            this.pool = [];
+            this.maxSize = maxSize;
+            this.sounds = {};
+            this.init();
+        }
+
+        async init() {
+            // Placeholder URLs - Update these with actual sound file URLs
+            this.soundUrls = {
+                click: 'https://audio.jukehost.co.uk/SOrgXYyuSDba9zvEdeTW8RrOGMrYd9y0',
+                modalOpen: 'https://audio.jukehost.co.uk/zad5xxM4q02PUSVOETBG3RJpEtvXSH3J',
+                modalClose: 'https://audio.jukehost.co.uk/Whky4jETI3TKg8sshzRAoE7znGQoqWV0',
+                alert: 'https://audio.jukehost.co.uk/Y5rExcLxu34GqVwjFykiJAU5SploYaGX',
+                profileTab: 'https://audio.jukehost.co.uk/PYHf3UV3PYLswk1z10xJmvv08zkZ2yrO',
+                sectionOpen: 'https://audio.jukehost.co.uk/93zIHUwOUTFF1mpNMJlB1c647rqFsgEg',
+                sectionClose: 'https://audio.jukehost.co.uk/hKORFoyigdJil5uXgqXC8DoOKK9u1KdA'
+            };
+
+            // Pre-load all sounds
+            await this.preloadSounds();
+        }
+
+        async preloadSounds() {
+            for (const [key, url] of Object.entries(this.soundUrls)) {
+                try {
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        console.warn(`Failed to load sound: ${key}, using fallback`);
+                        continue;
+                    }
+                    
+                    // Create audio context for each sound
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const audioBuffer = await audioContext.decodeAudioData(await response.arrayBuffer());
+                    
+                    this.sounds[key] = {
+                        audioContext,
+                        audioBuffer,
+                        url
+                    };
+                    
+                    console.log(`Preloaded sound: ${key}`);
+                } catch (error) {
+                    console.error(`Error loading sound ${key}:`, error);
+                    // Create a silent fallback audio buffer
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.1, audioContext.sampleRate);
+                    this.sounds[key] = {
+                        audioContext,
+                        audioBuffer: buffer,
+                        url: null
+                    };
+                }
+            }
+        }
+
+        play(soundName, volume = 0.5) {
+            if (!this.sounds[soundName]) {
+                console.warn(`Sound not found: ${soundName}`);
+                return;
+            }
+
+            // Get or create audio context
+            let audioContext = this.sounds[soundName].audioContext;
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+
+            // Create source
+            const source = audioContext.createBufferSource();
+            source.buffer = this.sounds[soundName].audioBuffer;
+
+            // Create gain node for volume control
+            const gainNode = audioContext.createGain();
+            gainNode.gain.value = volume;
+
+            // Connect nodes
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            // Play sound
+            source.start(0);
+
+            // Cleanup after playback
+            source.onended = () => {
+                source.disconnect();
+                gainNode.disconnect();
+            };
+
+            return source;
+        }
+    }
+
+    // Initialize SoundPool
+    const soundPool = new SoundPool();
+
+    // Sound effect functions
+    function playSound(soundName, volume = 0.3) {
+        // Play sound if audio context is ready
+        if (soundPool.sounds[soundName]) {
+            try {
+                soundPool.play(soundName, volume);
+            } catch (error) {
+                console.warn(`Failed to play sound ${soundName}:`, error);
+            }
+        }
+    }
+
+    // ====================== FIREBASE CONFIGURATION ====================== //
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0Ne46PQqmvUnsq89GUJlKfLpWvsHmtbk",
+      authDomain: "kimi-win-90b82.firebaseapp.com",
+      databaseURL: "https://kimi-win-90b82-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "kimi-win-90b82",
+      storageBucket: "kimi-win-90b82.firebasestorage.app",
+      messagingSenderId: "889222798634",
+      appId: "1:889222798634:web:86770b996003152f19d253"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    // Profile pictures (same as invest page)
+    const PROFILE_PICTURES = [
+      'https://cdn-icons-png.flaticon.com/512/9203/9203764.png',
+      'https://cdn-icons-png.flaticon.com/512/219/219986.png',
+      'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+      'https://cdn-icons-png.flaticon.com/512/147/147144.png',
+      'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      'https://cdn-icons-png.flaticon.com/512/4140/4140047.png',
+      'https://cdn-icons-png.flaticon.com/512/4140/4140048.png',
+      'https://cdn-icons-png.flaticon.com/512/4333/4333609.png',
+      'https://cdn-icons-png.flaticon.com/512/924/924874.png',
+      'https://cdn-icons-png.flaticon.com/512/924/924875.png'
+    ];
+
+    // User data
+    let userData = {
+      uid: null,
+      email: null,
+      profileData: null,
+      referralCode: null,
+      bankDetails: {
+        accountNumber: "",
+        accountName: "",
+        bankName: "",
+        ifscCode: ""
+      },
+      totalBalance: 0,
+      referralEarnings: 0,
+      totalReferrals: 0,
+      referredVia: null,
+      createdAt: null,
+      Referrals: {},
+      hasUsedReferral: false
+    };
+
+    // ====================== AUTHENTICATION CHECK ====================== //
+    function checkAuthState() {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          // User is signed in
+          userData.uid = user.uid;
+          userData.email = user.email || "Guest User";
+          
+          // Load user data from database
+          loadUserData();
+        } else {
+          // User is signed out, redirect to auth page
+          window.location.href = 'index.html';
+        }
+      });
+    }
+
+    // ====================== USER DATA FUNCTIONS ====================== //
+    function loadUserData() {
+      if (!userData.uid) return;
+      
+      database.ref('appusers/' + userData.uid).on('value', (snapshot) => {
+        const data = snapshot.val();
+        
+        if (data) {
+          // Update user data - CORRECTED DATA FETCHING
+          userData.referralCode = data.referralCode || "Not generated";
+          userData.totalBalance = parseFloat(data.totalBalance) || 0;
+          userData.referralEarnings = parseFloat(data.referralEarnings) || 0;
+          userData.totalReferrals = data.totalReferrals || 0;
+          userData.referredVia = data.referredVia || null;
+          userData.createdAt = data.createdAt || null;
+          userData.Referrals = data.Referrals || {};
+          userData.hasUsedReferral = data.hasUsedReferral || false;
+          
+          // Load profile data
+          if (data.profile) {
+            userData.profileData = data.profile;
+          } else {
+            // Check localStorage for legacy data
+            const savedProfile = localStorage.getItem(`profile_${userData.uid}`);
+            if (savedProfile) {
+              userData.profileData = JSON.parse(savedProfile);
+            } else {
+              // Initialize default profile data
+              userData.profileData = {
+                name: '',
+                profilePic: PROFILE_PICTURES[0],
+                selectedPicIndex: 0
+              };
+            }
+          }
+          
+          // Update bank details if they exist
+          if (data.BankDetails) {
+            userData.bankDetails = {
+              accountNumber: data.BankDetails.accountNumber || "",
+              accountName: data.BankDetails.accountName || "",
+              bankName: data.BankDetails.bankName || "",
+              ifscCode: data.BankDetails.ifscCode || ""
+            };
+            
+            // Update form fields
+            document.getElementById('accountName').value = userData.bankDetails.accountName;
+            document.getElementById('accountNumber').value = userData.bankDetails.accountNumber;
+            document.getElementById('bankName').value = userData.bankDetails.bankName;
+            document.getElementById('ifscCode').value = userData.bankDetails.ifscCode;
+          } else if (data.bankDetails) {
+            // Alternative field name check
+            userData.bankDetails = {
+              accountNumber: data.bankDetails.accountNumber || "",
+              accountName: data.bankDetails.accountName || "",
+              bankName: data.bankDetails.bankName || "",
+              ifscCode: data.bankDetails.ifscCode || ""
+            };
+            
+            // Update form fields
+            document.getElementById('accountName').value = userData.bankDetails.accountName;
+            document.getElementById('accountNumber').value = userData.bankDetails.accountNumber;
+            document.getElementById('bankName').value = userData.bankDetails.bankName;
+            document.getElementById('ifscCode').value = userData.bankDetails.ifscCode;
+          }
+          
+          // Update UI
+          updateUI();
+        } else {
+          // If no data exists, initialize user data
+          initializeUserData();
+        }
+      }, (error) => {
+        console.error("Error loading user data:", error);
+        showToast("Error loading profile data", "error");
+        playSound('alert');
+      });
+    }
+
+    function initializeUserData() {
+      // Generate referral code if not exists
+      if (!userData.referralCode) {
+        userData.referralCode = generateReferralCode();
+      }
+      
+      // Set creation date
+      userData.createdAt = Date.now();
+      
+      // Initialize profile data
+      userData.profileData = {
+        name: '',
+        profilePic: PROFILE_PICTURES[0],
+        selectedPicIndex: 0
+      };
+      
+      // Save initial user data to Firebase
+      const userRef = database.ref('appusers/' + userData.uid);
+      userRef.set({
+        email: userData.email,
+        referralCode: userData.referralCode,
+        totalBalance: 0,
+        referralEarnings: 0,
+        totalReferrals: 0,
+        hasUsedReferral: false,
+        createdAt: userData.createdAt,
+        createdAtHuman: new Date().toISOString(),
+        profile: userData.profileData
+      }).then(() => {
+        // Also save to referralCodes for quick lookup
+        database.ref('referralCodes/' + userData.referralCode).set(userData.uid);
+        updateUI();
+      }).catch(error => {
+        console.error("Error initializing user data:", error);
+        playSound('alert');
+      });
+    }
+
+    function generateReferralCode() {
+      // Generate a 10-character alphanumeric code
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < 10; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    function updateUI() {
+      // Debug log to confirm UI update
+      console.log("Updating UI with:", {
+        totalBalance: userData.totalBalance,
+        referralEarnings: userData.referralEarnings,
+        totalReferrals: userData.totalReferrals,
+        profileData: userData.profileData
+      });
+      
+      // Update balances - CORRECTED TO USE CORRECT FIELDS
+      document.getElementById('totalBalance').textContent = `₹${userData.totalBalance.toFixed(2)}`;
+      document.getElementById('referralEarnings').textContent = `₹${userData.referralEarnings.toFixed(2)}`;
+      
+      // Update profile avatar
+      updateProfileAvatar();
+      
+      // Update greeting with user's name or email
+      const userName = userData.profileData?.name || userData.email.split('@')[0];
+      document.getElementById('userGreeting').textContent = `${userName}`;
+      
+      // Update other display fields
+      document.getElementById('userEmailDisplay').textContent = userData.email;
+      document.getElementById('infoEmail').textContent = userData.email;
+      
+      // Update referral info
+      document.getElementById('referralCode').textContent = userData.referralCode || "Not generated";
+      document.getElementById('referredBy').textContent = userData.referredVia || "Not referred";
+      
+      // Count total referrals from Referrals object if totalReferrals is not available
+      let referralCount = userData.totalReferrals;
+      if (!referralCount && userData.Referrals) {
+        referralCount = Object.keys(userData.Referrals).length;
+      }
+      document.getElementById('totalReferrals').textContent = referralCount || 0;
+      
+      // Update account status
+      const accountStatus = auth.currentUser.emailVerified ? "Verified ✔️" : "active";
+      document.getElementById('accountStatus').textContent = accountStatus;
+      
+      // Update member since date
+      if (userData.createdAt) {
+        const date = new Date(userData.createdAt);
+        document.getElementById('memberSince').textContent = formatDate(userData.createdAt);
+      } else {
+        document.getElementById('memberSince').textContent = "Just now";
+      }
+    }
+
+    function updateProfileAvatar() {
+      const profileAvatar = document.getElementById('profileAvatar');
+      if (profileAvatar && userData.profileData?.profilePic) {
+        profileAvatar.style.backgroundImage = `url('${userData.profileData.profilePic}')`;
+        profileAvatar.style.backgroundSize = '100% 100%';
+      }
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return "N/A";
+      const date = new Date(timestamp);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric'
+      });
+    }
+
+    // ====================== PROFILE MODAL FUNCTIONS ====================== //
+    function showProfileModal() {
+      if (!userData.uid) return;
+      
+      // Play modal open sound
+      playSound('modalOpen', 0.4);
+      
+      // Populate profile form
+      document.getElementById('profileName').value = userData.profileData?.name || '';
+      
+      if (userData.profileData?.profilePic) {
+        document.getElementById('currentProfilePic').src = userData.profileData.profilePic;
+      } else {
+        document.getElementById('currentProfilePic').src = PROFILE_PICTURES[0];
+      }
+      
+      // Populate profile picture grid
+      const profilePicGrid = document.getElementById('profilePicGrid');
+      profilePicGrid.innerHTML = '';
+      
+      PROFILE_PICTURES.forEach((picUrl, index) => {
+        const img = document.createElement('img');
+        img.src = picUrl;
+        img.alt = `Profile Pic ${index + 1}`;
+        img.className = 'profile-pic-option';
+        
+        // Check if this is the selected picture
+        if (userData.profileData?.profilePic === picUrl || 
+            (!userData.profileData?.profilePic && index === 0)) {
+          img.classList.add('selected');
+        }
+        
+        img.onclick = () => {
+          playSound('click');
+          selectProfilePicture(picUrl, index);
+        };
+        profilePicGrid.appendChild(img);
+      });
+      
+      // Show modal
+      document.getElementById('profileModalOverlay').style.display = 'flex';
+    }
+
+    function closeProfileModal() {
+      playSound('modalClose', 0.4);
+      document.getElementById('profileModalOverlay').style.display = 'none';
+    }
+
+    function selectProfilePicture(picUrl, index) {
+      // Play click sound
+      playSound('click');
+      
+      // Remove selected class from all pictures
+      document.querySelectorAll('.profile-pic-option').forEach(img => {
+        img.classList.remove('selected');
+      });
+      
+      // Add selected class to clicked picture
+      event.target.classList.add('selected');
+      
+      // Update current profile picture preview
+      document.getElementById('currentProfilePic').src = picUrl;
+      
+      // Update profile data
+      if (!userData.profileData) {
+        userData.profileData = {
+          name: userData.profileData?.name || '',
+          profilePic: picUrl,
+          selectedPicIndex: index
+        };
+      } else {
+        userData.profileData.profilePic = picUrl;
+        userData.profileData.selectedPicIndex = index;
+      }
+    }
+
+    function openLocalGallery() {
+      playSound('click');
+      document.getElementById('localGalleryInput').click();
+    }
+
+    function handleGalleryImage(event) {
+      playSound('click');
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      if (!file.type.startsWith('image/')) {
+        showToast("Please select an image file", "error");
+        playSound('alert');
+        return;
+      }
+      
+      // Check file size (limit to 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Image size should be less than 2MB", "error");
+        playSound('alert');
+        return;
+      }
+      
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        // Update profile picture with local image
+        const localImageUrl = e.target.result;
+        document.getElementById('currentProfilePic').src = localImageUrl;
+        
+        // Update profile data
+        if (!userData.profileData) {
+          userData.profileData = {
+            name: userData.profileData?.name || '',
+            profilePic: localImageUrl,
+            selectedPicIndex: -1 // -1 indicates local image
+          };
+        } else {
+          userData.profileData.profilePic = localImageUrl;
+          userData.profileData.selectedPicIndex = -1;
+        }
+        
+        // Remove selected class from all grid pictures
+        document.querySelectorAll('.profile-pic-option').forEach(img => {
+          img.classList.remove('selected');
+        });
+        
+        showToast("Local image selected. Click Save Changes to apply.", "success");
+      };
+      
+      reader.readAsDataURL(file);
+    }
+
+    function saveProfile() {
+      playSound('click');
+      
+      if (!userData.uid) return;
+      
+      // Get form values
+      const name = document.getElementById('profileName').value.trim();
+      
+      // Basic validation
+      if (!name) {
+        showToast("Please enter your name", "error");
+        playSound('alert');
+        return;
+      }
+      
+      if (name.length < 2) {
+        showToast("Name must be at least 2 characters long", "error");
+        playSound('alert');
+        return;
+      }
+      
+      // Update profile data
+      if (!userData.profileData) {
+        userData.profileData = {
+          name: name,
+          profilePic: PROFILE_PICTURES[0],
+          selectedPicIndex: 0
+        };
+      } else {
+        userData.profileData.name = name;
+        // Ensure profilePic exists
+        if (!userData.profileData.profilePic) {
+          userData.profileData.profilePic = PROFILE_PICTURES[0];
+        }
+      }
+      
+      // Save to Firebase RTDB
+      database.ref(`appusers/${userData.uid}/profile`).set(userData.profileData)
+        .then(() => {
+          // Update UI
+          updateProfileAvatar();
+          
+          // Update greeting with new name
+          document.getElementById('userGreeting').textContent = `${name}`;
+          
+          // Close modal
+          closeProfileModal();
+          
+          showToast("Profile updated successfully!", "success");
+        })
+        .catch(error => {
+          showToast("Failed to save profile. Please try again.", "error");
+          playSound('alert');
+          console.error('Error saving profile:', error);
+        });
+    }
+
+    // ====================== BANK DETAILS FUNCTIONS ====================== //
+    function saveBankDetails() {
+      playSound('click');
+      
+      const accountName = document.getElementById('accountName').value.trim();
+      const accountNumber = document.getElementById('accountNumber').value.trim();
+      const bankName = document.getElementById('bankName').value.trim();
+      const ifscCode = document.getElementById('ifscCode').value.trim();
+      
+      // Basic validation
+      if (!accountName || !accountNumber || !bankName || !ifscCode) {
+        showToast("Please fill in all bank details", "error");
+        playSound('alert');
+        return;
+      }
+      
+      if (accountNumber.length < 9 || accountNumber.length > 18) {
+        showToast("Please enter a valid account number", "error");
+        playSound('alert');
+        return;
+      }
+      
+      if (ifscCode.length !== 11) {
+        showToast("IFSC code must be 11 characters", "error");
+        playSound('alert');
+        return;
+      }
+      
+      // Show loading spinner
+      document.getElementById('saveSpinner').style.display = 'block';
+      
+      // Save to Firebase
+      const updates = {
+        'BankDetails/accountName': accountName,
+        'BankDetails/accountNumber': accountNumber,
+        'BankDetails/bankName': bankName,
+        'BankDetails/ifscCode': ifscCode
+      };
+      
+      database.ref('appusers/' + userData.uid).update(updates)
+        .then(() => {
+          // Update local data
+          userData.bankDetails = {
+            accountName,
+            accountNumber,
+            bankName,
+            ifscCode
+          };
+          
+          showToast("Bank details saved successfully!", "success");
+          document.getElementById('saveSpinner').style.display = 'none';
+        })
+        .catch(error => {
+          showToast("Error saving bank details: " + error.message, "error");
+          playSound('alert');
+          document.getElementById('saveSpinner').style.display = 'none';
+        });
+    }
+
+    // ====================== UTILITY FUNCTIONS ====================== //
+    function showTab(tabId) {
+      // Play profile tab sound
+      playSound('profileTab', 0.4);
+      
+      // Update tabs UI
+      const tabs = document.querySelectorAll('.profile-tab');
+      tabs.forEach(tab => tab.classList.remove('active'));
+      
+      const activeTab = document.querySelector(`.profile-tab[onclick="showTab('${tabId}')"]`);
+      activeTab.classList.add('active');
+      
+      // Update tab indicator
+      if (tabId === 'profile') {
+        document.getElementById('profileTabs').classList.remove('tab-2');
+      } else {
+        document.getElementById('profileTabs').classList.add('tab-2');
+      }
+      
+      // Show the selected content
+      const contents = document.querySelectorAll('.profile-content');
+      contents.forEach(content => content.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function toggleSection(sectionId) {
+      const content = document.getElementById(sectionId + 'Content');
+      const icon = document.getElementById(sectionId + 'Icon');
+      
+      // Toggle expanded state and play appropriate sound
+      if (content.classList.contains('expanded')) {
+        // Close section
+        content.classList.remove('expanded');
+        icon.classList.remove('expanded');
+        playSound('sectionClose', 0.3);
+      } else {
+        // Open section
+        content.classList.add('expanded');
+        icon.classList.add('expanded');
+        playSound('sectionOpen', 0.3);
+      }
+    }
+
+    function copyToClipboard(elementId) {
+      playSound('click');
+      
+      const element = document.getElementById(elementId);
+      const text = element.textContent;
+      
+      if (text === "loading..." || text === "Not generated") {
+        showToast("Nothing to copy", "warning");
+        playSound('alert');
+        return;
+      }
+      
+      navigator.clipboard.writeText(text)
+        .then(() => showToast("Copied to clipboard!", "success"))
+        .catch(() => {
+          showToast("Failed to copy", "error");
+          playSound('alert');
+        });
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      const toastIcon = toast.querySelector('i');
+      
+      toast.className = `toast ${type}`;
+      toastMessage.textContent = message;
+      
+      if (type === 'success') {
+        toastIcon.className = 'fas fa-check-circle';
+      } else if (type === 'error') {
+        toastIcon.className = 'fas fa-exclamation-circle';
+        playSound('alert', 0.4);
+      } else if (type === 'warning') {
+        toastIcon.className = 'fas fa-exclamation-triangle';
+        playSound('alert', 0.3);
+      } else {
+        playSound('click');
+      }
+      
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function logout() {
+      playSound('click');
+      
+      auth.signOut()
+        .then(() => {
+          // Clear local storage if needed
+          localStorage.removeItem('uid');
+          localStorage.removeItem('email');
+          localStorage.removeItem('login_method');
+          
+          // Redirect to auth page
+          window.location.href = 'index.html';
+        })
+        .catch(error => {
+          showToast("Error signing out: " + error.message, "error");
+          playSound('alert');
+        });
+    }
+
+    // ====================== EVENT LISTENERS ====================== //
+    // Add click event listeners for default click sounds
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click sounds to interactive elements
+      const clickableElements = [
+        'button:not([onclick*="copyToClipboard"]):not([onclick*="logout"]):not([onclick*="showProfileModal"]):not([onclick*="closeProfileModal"]):not([onclick*="saveProfile"]):not([onclick*="openLocalGallery"]):not([onclick*="saveBankDetails"]):not([onclick*="showTab"])',
+        'input[type="submit"]',
+        '.btn:not(.profile-tab)',
+        '.profile-pic-option',
+        '.close-modal'
+      ].join(',');
+      
+      // Delegate click events for dynamic elements
+      document.addEventListener('click', function(e) {
+        // Check if element matches clickable selectors
+        if (e.target.matches(clickableElements) || 
+            e.target.closest(clickableElements) ||
+            e.target.onclick) {
+          // Check if it's not a section toggle or profile tab (they have their own sounds)
+          if (!e.target.closest('[onclick*="toggleSection"]') && 
+              !e.target.closest('[onclick*="showTab"]') &&
+              !e.target.matches('[onclick*="toggleSection"]') &&
+              !e.target.matches('[onclick*="showTab"]')) {
+            playSound('click', 0.2);
+          }
+        }
+      });
+      
+      // Close modal when clicking outside
+      document.getElementById('profileModalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeProfileModal();
+        }
+      });
+
+      // Initialize toggle sections to be closed by default
+      const sectionContents = document.querySelectorAll('.section-content');
+      sectionContents.forEach(content => {
+        content.classList.remove('expanded');
+      });
+      
+      const sectionIcons = document.querySelectorAll('.section-toggle i');
+      sectionIcons.forEach(icon => {
+        icon.classList.remove('expanded');
+      });
+      
+      // Initialize the page
+      checkAuthState();
+    });
+  </script>
+</body>
+</html>

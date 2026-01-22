@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>kamaaikendra corporation Bank Withdrawal page</title>
+
+  <!-- Icons / libs (unchanged) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+  <!-- Firebase SDK (unchanged) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <style>
+    /* Reset and base */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { min-height: 100%; }
+    body {
+      font-family:fantasy;
+      color: #0b2a22;
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+      max-width: 100vw;
+      margin: 0 auto;
+      padding: 8px 12px 16px;
+      line-height: 1.35;
+    }
+
+    :root{
+      --bg: #0f3d33;
+      --bg-2:#10463a;
+      --surface:#f7faf9;
+      --surface-2:#ffffff;
+      --muted:#5a6b67;
+      --brand:#12b886; /* mint */
+      --brand-2:#0fa678;
+      --accent:#ffd166; /* soft amber */
+      --error:#e05666;
+      --ok:#19b36b;
+      --ring: 0 0 0 3px rgba(18,184,134,.18);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 6px 20px rgba(0,0,0,.10);
+      --shadow-soft: 0 2px 10px rgba(0,0,0,.08);
+      --trans: 180ms cubic-bezier(.2,.8,.2,1);
+      --gap: 10px;
+    }
+
+    /* Layout */
+    .container { 
+        display: flex;
+        flex-direction:
+        column; gap: 10px; 
+        
+    }
+
+    header{
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between;
+            background: linear-gradient(0deg, rgba(190,80,150,0.2) 0%, #893BFF 10%, #5539CC 100%);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+      padding: 6px 12px;
+      margin: 0 -12px;
+      border-radius: 0;
+      position: sticky; top: 0;
+      margin-top: -10px;
+      z-index: 9900;
+      height: 50px;
+    }
+
+    .logo{
+      display:flex; 
+      align-items:center;
+      gap:8px;
+      color: #e9fbf3; 
+      font-weight: 800; 
+      letter-spacing:.3px; 
+      font-size: 12px;
+    }
+    .logo img{ 
+        height: 36px;
+        width: 36px; 
+        border-radius: 10px;
+        object-fit: cover; 
+        
+    }
+
+    .header-actions{ 
+        display:flex; gap:8px;
+        }
+
+    .header-btn,
+    .records-button,
+    .back-button{
+      display:inline-flex; 
+      align-items:center;
+      justify-content:center;
+      padding:8px;
+      width:40px;
+      height:40px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,25,255,.12);
+      background: rgba(255,255,255,.06);
+      color:#eafbf3; 
+      font-size:18px;
+      cursor:pointer;
+      transition: var(--trans);
+      text-decoration:none;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.4),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+    }
+    .header-btn:hover,
+    .records-button:hover,
+    .back-button:hover{ 
+        transform: translateY(-1px);
+        background: rgba(255,255,255,.1);
+    }
+
+    .back-button{ 
+        position: fixed;
+        right: 60px;
+        top: 5px; 
+        z-index: 10000;
+    }
+    .records-button{
+        position: fixed; 
+        right: 10px;
+        top: 5px; 
+        z-index: 10000; 
+    }
+
+    /* Balance card */
+    .balance-display{
+      position: relative;
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+      background-size: 100% 100%;
+      border: 1px solid black;
+      outline:1px solid #fdbd01;
+      color: #0e5a49;
+      border-radius:4px;
+      padding: 10px;
+      margin: -5px;
+      text-align:center;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.8),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+      overflow:hidden;
+      margin-top: 15px;
+    }
+    .balance-label{ 
+        font-size: 10px; 
+        font-weight: 800;
+        color:white;
+        font-family: Segoe UI;
+        letter-spacing:.2px;
+        margin-bottom: 4px;
+        }
+    .balance-amount{ 
+        font-size: 18px;
+    font-weight: 900;
+    font-family:Segoe UI;
+    background: linear-gradient(0deg, #fdbd01, #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+     -webkit-text-stroke:.5px #fdbd01;
+        }
+    .balance-subtext{ 
+        font-size: 10px; 
+        color: #4b5a56; 
+        margin-top: 2px;
+        font-family: Monospace;
+        font-weight: 900;
+        }
+
+    /* Cards */
+    .card {
+  background: rgba(55, 20, 95, 0.95);
+  border-radius: 2px;
+  padding: 10px;
+  overflow-y: auto; /* Changed from 'hidden' to enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  height: 300px; /* Fixed height */
+  width: 100%; /* Full width */
+  
+  /* Optional: Better scrollbar styling */
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent; /* For Firefox */
+}
+
+/* For Webkit browsers (Chrome, Safari, Edge) */
+.card::-webkit-scrollbar {
+  width: 0px;
+}
+
+.card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.card::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+    .card-title{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:White;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.99);
+      background: #fdbd01;
+      margin:-15px;
+      font-weight:900; 
+      font-size:14px;
+      margin-bottom: 10px;
+      padding-left:15px;
+      padding-top: 8px;
+      padding-bottom: 5px;
+      padding-right: 15px;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.8),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+    }
+    .card-title i{ 
+        color: var(--brand);
+    }
+
+    /* Form */
+    .form-group{ margin-bottom: 5px; }
+    label{ 
+        display:block;
+        font-size: 11px; 
+        color:rgba(255,255,255,0.8);
+        font-weight: 600; 
+        font-family: Segoe UI;
+        margin-bottom: 3px;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+        
+    }
+
+    input, select{
+      width:100%;
+      padding: 5px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+      box-shadow:
+        inset 0 1px 2px rgba(205, 25, 355, 0.5),
+        inset 0 -1px 2px rgba(180, 20, 350, 0.4);
+      color:rgba(255,255,255,0.9);
+      font-size: 12px;
+      text-shadow: 0 1px 1px rgba(0,0,20,0.9);
+      font-family: Segoe UI;
+      font-weight: 900;
+      transition: var(--trans);
+      -webkit-user-select: text; user-select:text;
+    }
+    input:focus, select:focus{ 
+        outline: none;
+         box-shadow:
+        inset 0 2px 4px rgba(205, 25, 355, 0.5),
+        inset 0 -2px 4px rgba(180, 20, 350, 0.4);
+    }
+
+    .saved-accounts{
+        display:flex; 
+        align-items:center;
+        gap:8px; 
+        
+    }
+    .saved-accounts select{
+      flex: 1;
+      background: #f7fffc;
+      border-color: #c8efe4;
+      color:#0e5a49;
+      font-weight:700;
+      font-size: 8px;
+      display: none;
+    }
+    .button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  /* Keep all your existing styles */
+  min-width: 100px;
+  padding: 8px;
+  border: none;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 10px;
+  font-family: fantasy;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: var(--trans);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.99);
+}
+    .btn:active{ 
+        transform: scale(.98);
+        }
+
+    .btn-success{
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgiytFIDLtbbPKgECWA1xfzCIimG9BR41xaF9yAWAwza4KZX5y4Xbf1yLwfEPwoCQeqmMQk_Ut98dM5DqhVmVQOnRWFJad6cFjn41S53TKEA6-EM-SoIjkU2kD8RI_kEQfGLgtHEjSYYXXCMqsXifUKW33_cHaSiUl24wNWXOWQ5Pzl16jUkNHlJBYY7sc/s16000/1000111663.png");
+      background-size: 100% 100%;
+      color:white;
+    }
+    .btn-success:hover{ 
+        filter: brightness(1.03);
+    }
+
+    .btn-primary{
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgblH1VThPIvWAyTLgZFEi67yZybhnsLRq5jpUivmnoIefVXw79_L_jqf-8DjCHi_y8JVf2CrlJvsXZNrj6CSIJWfjDENRVJKlPk9L_AAZrgq74b3pC_2CtAvPtMtr9sC5F8mRqmjLhcWPbqydsC1xy8LTYA4DNT35Ub28ZatyPSIUREf0vXy0ufLkF-J4/s16000/1000110830.png");
+      background-size: 100% 100%;
+      color: white;
+    }
+    .btn-outline{
+      background: #0f3d33;
+      color:white;
+    }
+
+    /* Amount grid */
+    .amount-options{
+      display:grid; grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .withdraw-option{
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+      border-top: 1px solid rgba(88,33,100,0.4);
+      border-radius: 4px;
+      padding: 10px;
+      text-align:center;
+      cursor:pointer;
+      transition: var(--trans);
+      box-shadow:
+        inset 0 3px 6px rgba(205, 5, 345, 0.4),
+        inset 0 -3px 6px rgba(180, 22, 200, 0.5);
+    }
+    .withdraw-option.selected{
+        border-color: #fdbd01;
+        filter: drop-shadow(0 0 2px #Fdbd01) 
+        drop-shadow(0 0 2px rgba(255, 265, 0, 0.99));
+transition: transform 0.01s ease-out;
+pointer-events: auto;
+    }
+    .withdraw-option .amount{
+        font-size: 15px;
+    font-weight: 900;
+    font-family: serif;
+    background: linear-gradient(0deg, #fdbd01, #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+     -webkit-text-stroke:.5px #fdbd01;
+    }
+    .withdraw-option .label{
+        margin-left:-10px;
+        margin-right: -10px;
+        font-size: 10px; 
+        color:white;
+        padding:2px;
+        font-weight: 500;
+        font-family:Segoe UI;
+        background: 
+    radial-gradient(
+      circle at center,
+      rgba(155, 44, 255, 0.9),
+      rgba(128, 11, 255, 0.9)
+    );      
+    }
+
+    /* Tax calc */
+    .tax-calculation{
+      display:none;
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+      color:rgba(255,255,255,0.7);
+      border: 1px solid rgba(180,22,210,0.3);
+      border-radius: 6px;
+      padding: 5px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      animation: fadeIn .2s ease;
+      font-size: 10px;
+      font-weight: 400;
+      font-family: Segoe UI;
+    }
+    .tax-row{ 
+        display:flex;
+        justify-content:space-between;
+        padding: 5px 0; 
+        border-bottom: 1px dashed #dff5ee;
+    }
+    .tax-row:last-child{
+        border-bottom: none; 
+    }
+    .tax-total{ 
+        font-weight: 700;
+        color:rgba(255,255,255,0.9);
+    }
+
+    /* Hint / limit */
+    .hint{
+      background: #fff8e8;
+      border: 1px solid #ffe4a3;
+      color:#6b5c27;
+      border-radius: 10px; 
+      padding: 10px; 
+      font-size: 12px;
+      display:flex;
+      gap:8px; 
+      align-items:flex-start;
+    }
+    .bank-details-limit{
+      background: #fff1f3; 
+      border-left: 3px solid var(--error); 
+      padding: 10px;
+      border-radius: 10px;
+      color:#7f2530;
+      font-size: 12px;
+    }
+
+    /* Method Selection Tabs */
+    .method-tabs {
+      display: flex;
+      gap:0;
+      margin: 0;
+      padding: 0;
+      overflow-x: auto;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    .method-tab {
+      flex: 1;
+      padding: 5px 2px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 900;
+      font-family: Segoe UI;
+      background: linear-gradient(135deg, white 50%, silver 50% 100%);
+      background-size: 100% 100%;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+      color: #5a6b67;
+      border:none;
+      border-radius: 0px;
+      cursor: pointer;
+      transition: var(--trans);
+      white-space: nowrap;
+      min-width: 50px;
+    }
+    .method-tab.active {
+      color:rgba(555,455,55,0.99);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.4);
+      background: 
+    radial-gradient(
+      circle at center,
+      rgba(155, 44, 255, 0.9),
+      rgba(128, 11, 255, 0.9)
+    );      
+    }
+
+/* MAIN CARD */
+.bank-details-display {
+  background: #f1d21b;
+  border-radius: 6px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-top: 3px;
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.6),
+    inset 0 -2px 4px rgba(0,0,0,0.3),
+    0 4px 10px rgba(0,0,0,0.4);
+  position: relative;
+}
+
+/* INNER CREAM AREA */
+.bank-card-body {
+  background: #fbf4df;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding-left:0px;
+  padding-top: 10px;
+  padding-bottom: 2px;
+  padding-right: 25px;
+  box-shadow:
+    inset 0 2px 3px rgba(0,0,0,0.8),
+    inset 0 -2px 3px rgba(0,0,0,0.2),
+    0 6px 10px rgba(0,0,0,0.5),
+    0 -3px 8px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+/* ROW */
+.bank-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* LEFT LABEL */
+.bank-label {
+  width: 80px;
+  text-align: right;
+  font-weight: 900;
+  font-size: 12px;
+  color: #4b2b10;
+  padding-right: 5px;
+  font-family: Segoe UI;
+}
+
+/* RIGHT VALUE BOX */
+.bank-value {
+  flex: 1;
+  background: #54405e;
+  color: #ffffff;
+  font-family: Segoe UI;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 5px 12px;
+  border-radius: 4px;
+  text-align: left;
+  box-shadow:
+    inset 0 2px 3px rgba(0,0,0,0.2),
+    inset 0 -2px 3px rgba(0,0,0,0.3);
+}
+
+/* RIGHT ARROW BUTTON */
+.edit-bank-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  color: #5a3216;
+  cursor: pointer;
+}
+
+.edit-bank-btn i {
+  font-weight: 900;
+}
+
+    /* NEW: Bank/UPI Details Update Modal */
+    .bank-update-modal {
+      display: none;
+      position: fixed;
+      top:0;
+      left:0;
+      right:0;
+      height:100vh;
+      width:100vw;
+      padding: 10px;
+      padding-top: 60px;
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+      z-index: 10001;
+      overflow-y: auto;
+    }
+
+    .bank-update-container {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .bank-update-header {
+        position: fixed;
+        top:0;
+        left:0;
+        right:0;
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between;
+      background: linear-gradient(0deg, rgba(190,80,150,0.2) 0%, #893BFF 10%, #5539CC 100%);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+      padding: 6px 12px;
+      position:fixed; 
+      z-index: 9900;
+      height: 50px;
+    }
+
+    .bank-update-back {
+      display:inline-flex; 
+      align-items:center;
+      justify-content:center;
+      padding:8px;
+      width:40px;
+      height:40px;
+      border-radius: 30px;
+      border: 1px solid rgba(255,25,255,.12);
+      background: rgba(255,255,255,.06);
+      color:#eafbf3; 
+      font-size:18px;
+      cursor:pointer;
+      transition: var(--trans);
+      text-decoration:none;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.4),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .bank-update-back:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.1);
+    }
+
+    .bank-update-form1 {
+  width: 100%;
+  margin-top: 10%;
+  margin-bottom: 100%;
+  border-radius: 8px;
+  padding: 14px;
+  padding-right: 40px;
+  background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiqKwUlVGwORqJ_6HsT47KyFZhIlvtNqpNTbStGgQwJNyMbbrqgJtCjFtronQaDYzJIJE-16AAa-Ybbwg8wx2hJP7LqiBZIFMzoqezVnTpyAb2wARGxgvtnyAwsO5qtQyd-0sR_T_B7tLtJSv2HKgeItXZTOo5n4o4OBjmLCcg_fB3nu0Wr33ag4czKHZA/s16000/1000111708.png"),linear-gradient(180deg,#9d5cf0,#7b39c8);
+  background-size: 100% 100%;
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,0.35),
+    inset 0 -3px 6px rgba(0,0,0,0.35),
+    0 8px 20px rgba(0,0,0,0.5);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.25);
+  font-family: Segoe UI;
+}
+
+/* TOP TITLE - Updated to show method */
+.imps-header1 {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 1px;
+  padding: 5px 0;
+  margin-top: -14px;
+  margin-bottom: 10px;
+  margin-right: -40px;
+  margin-left: -14px;
+  background: linear-gradient(180deg,#6d2f9c,#5b237f);
+  text-shadow: 0 2px 3px rgba(0,0,0,0.8);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+}
+
+/* ROW LAYOUT */
+.bank-row1 {
+  display: grid;
+  grid-template-columns: 30% 70%;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+/* LEFT LABEL */
+.bank-label1 {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffeaa7;
+  text-align:right;
+  padding-right: 10px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.6);
+}
+
+/* RIGHT INPUT */
+.bank-row1 input {
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 900;
+  color: #ffffff;
+  background:rgba(100,51,145,0.99);
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,0.15),
+    inset 0 -1px 2px rgba(0,0,0,0.2);
+}
+
+.bank-row1 input::placeholder {
+  color: rgba(255,255,255,0.9);
+  font-weight: 700;
+}
+
+    /* Records modal - UPDATED */
+    .records-modal{
+      height:100vh;
+      width:100vw;
+      position: fixed;
+      inset:0;
+      background: 
+        /* Gradient pattern on top */
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 44, 255, 0.2),
+          rgba(128, 11, 255, 0.2) 2px
+        ),
+        /* Background image underneath */
+        url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiwI8oQPlK3ZBPSYlfbfWqBn-53NKAyNjSDB_OingRbJEcPW7zgOs7x1D866gv56S7N-Q8LywptV-upvMrwXwiYcMg8ePpKwnIDfwdf3ODAAdmPN20T4N74Gchy91v6S0bSuPDQ-xwgOX_HjkGUcsLQ0MxUiOqRHyXP47mUVdfyLdaUr5nZHnX-x_tQwHw/s1024/1000108779.jpg');
+      background-blend-mode: overlay; /* Optional: blends the layers */
+      background-size: 100% 100%;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 10000;
+      padding: 0px;
+    }
+    .records-content{
+      background: 
+        /* Radial gradient on top */
+        radial-gradient(
+          circle at center,
+          rgba(125, 44, 155, 0.99),
+          rgba(128, 11, 155, 0.99)
+        ),
+        /* Background image underneath */
+        url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+      min-width: 100vw;
+      min-height:100vh;
+      max-width: 100vw; 
+      max-height: 100vh;
+      overflow: hidden; /* Changed from auto to hidden */
+      border-radius: 0px; 
+      box-shadow: var(--shadow); 
+      padding: 12px; 
+      padding-top: 0;
+      border: none;
+      animation: pop .18s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .records-header{ 
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding-bottom: 5px;
+        flex-shrink: 0; /* Prevent header from shrinking */
+    }
+    .records-title{
+        font-weight: 900;
+        font-family: Fantasy;
+        color:white; 
+        font-size: 15px;
+        text-shadow: 0 0.3px 0.6px rgba(0, 687, 67, 0.5);
+    }
+    .records-close{
+      font-size: 26px;
+      width:30px;
+      background: transparent;
+      color:rgba(255,255,255,0.8);
+      border:none;
+      cursor:pointer;
+      line-height: 1;
+    }
+
+    /* NEW: Tab system */
+    .records-tabs {
+      display: flex;
+      gap:3.5px;
+      margin: 9px 0;
+      padding:2px;
+      padding-bottom: 3px;
+      padding-top: 3px;
+      overflow-x: auto;
+      flex-shrink: 0; /* Prevent tabs from shrinking */
+    }
+    .records-tab {
+      flex: 1;
+      padding: 12px 2px;
+      text-align: center;
+      font-size: 10px;
+      font-weight: 900;
+      font-family: fantasy;
+      background: url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj6DJB9cQcI-A0UZLl4T6ou7MxXvMMb7xVDZsZ-V3a0h93v_PdcsPVdC6WWJDULN740XvPwqae68_6NQvo6rX_P3K49IMAC5rnTgthHVxbKdhaSWlteq5XQuY8YVrIgzLs1xNd1nNv5x7anBRO7nq8CXIZPHULLi755VGqH8z5SGEZcJIIcB6Kfc4iiwXY/s2000/1000110572.png"), white;  background-size: 100% 100%;
+      box-shadow: inset 0 0 10px rgba(0,0,0, 0.3);
+      color: #5a6b67;
+      border: 0.3px solid black;
+      border-radius: 8px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      cursor: pointer;
+      transition: var(--trans);
+      white-space: nowrap;
+      min-width: 50px;
+      outline:1.7px solid #fdbd01;
+    }
+    .records-tab.active {
+      color: #fdbd01;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.4);
+background-color: rgba(198,22,432,0.99);
+    }
+
+    /* NEW: Records container for scrollable content */
+    .records-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 2px;
+    }
+
+    /* Withdrawal card container */
+    .withdrawal-record {
+      display: flex;
+      flex-direction: column;
+      background:transparent;
+      border-radius: 10px;
+      padding:0;
+    }
+
+    /* BANK header block */
+    .record-section {
+    }
+
+    /* BANK title */
+    .record-section .record-label {
+      font-family: "Segoe UI", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      color: rgba(398,569,0,0.8);
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    /* Amount (+₹100 style) */
+    .record-section .record-value {
+      font-family: "Segoe UI", sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      color: #fdbd01;
+      text-align: right;
+      margin-top: -22px;
+    }
+
+    /* Time text */
+    .record-time {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    /* Divider exactly like image */
+    .record-divider {
+      width: 100%;
+      height: 0.6px;
+      background: linear-gradient(
+        to right,
+        rgba(253,189,1,0),
+        rgba(0,0,1,0.9),
+        rgba(253,189,1,0)
+      );
+      margin: 1px 0 2px;
+    }
+    .record-divider2{
+      width: 100%;
+      height: 0.7px;
+      background: linear-gradient(
+        to right,
+        rgba(253,189,1,0.2),
+        rgba(253,189,1,0.9),
+        rgba(253,189,1,0.2)
+      );
+      margin: 6px 0 8px;
+    }
+
+    /* Key-value rows */
+    .record-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0;
+    }
+
+    /* Left labels */
+    .record-row .record-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    /* Right values (green-blue tone like image) */
+    .record-row .record-value {
+      font-size: 10px;
+      font-weight: 500;
+      color: #58d6c9;
+      font-family: "Segoe UI", sans-serif;
+      text-align: right;
+      letter-spacing: 0.4px;
+    }
+
+    .no-records{
+        margin-top: 70%;
+        text-align:center;
+        padding: 18px; 
+        font-size: 12px;
+        font-family: Segoe UI;
+        color:white; 
+        font-weight: 900;
+    }
+
+    /* Popup */
+    .popup-container{
+      position: fixed; 
+      inset:0; 
+      background:
+      rgba(0,0,0,0.55); 
+      z-index:
+      100000; display:none;
+      align-items:center; 
+      justify-content:center;
+      padding: 5px;
+    }
+    .popup-content{
+      width:100%;
+      max-width: 420px;
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+      border-radius: 8px; 
+      padding: 14px;
+      border:2px solid black;
+      outline:2px solid rgba(245,208,0,1);
+      box-shadow: var(--shadow); 
+      animation: pop .18s ease;
+    }
+    .popup-title{
+        text-align:center; 
+        font-size: 14px;
+        font-weight: 900; 
+        color:white; 
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        padding: 3px;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.9);
+    }
+    .popup-message{ 
+        text-align:center;
+        color:white; 
+        font-size: 11px; 
+        font-family: Segoe UI;
+        background:rgba(0,0,0,0.7);
+        border-radius: 6px;
+        padding:5px;
+    }
+    .popup-buttons{
+        display:flex;
+        gap:8px;
+        align-content: center;
+        align-items: center;
+        align-self: center;
+        justify-content: center;
+        justify-items: center;
+        justify-self: center;
+    }
+    .popup-close{
+      position: absolute;
+      right: 8px; 
+      top: 8px; 
+      background: transparent; 
+      border: none;
+      font-size: 1px; 
+      color:#0f3d33; 
+      cursor:pointer;
+      line-height: 1;
+      opacity: 0;
+    }
+
+    /* Loading overlay */
+    .loading-screen{
+      position: fixed; 
+      inset:0;
+      background: 
+    /* Radial gradient on top */
+    radial-gradient(
+      circle at center,
+      rgba(125, 44, 155, 0.99),
+      rgba(128, 11, 155, 0.99)
+    ),
+    /* Background image underneath */
+    url('https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIdgLmOey-Wazo6OgYRZ84ytYF0kFvOpSs-5IeXzAkR8-A_YCd8t7krTINX-j00riNttDSkk1ZW_iem-FiTF7HotxoM1vGPREO4P33FLnYEC6a7zCf6FCW98wyGkHJvXRMgGMcO_dZgg0ieu18RQYPxkCNDaKoLcPUDQdXIAuXXqnQlMt_qN9WjAG7zlA/s16000/1000110623.png');  background-blend-mode: overlay; /* Optional: blends the layers */
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  background-blend-mode: overlay;
+      color:#eafbf3;
+      display:flex; 
+      flex-direction:column;
+      align-items:center; 
+      justify-content:center;
+      gap: 14px;
+      z-index: 20000;
+    }
+    .loading-logo{ 
+        width: 220px; 
+        height: 200px; 
+        object-fit: contain; 
+        animation: pulse 1.8s ease-in-out infinite;
+        position: fixed;
+        top:20%;
+    }
+    .loading-message{
+        font-size: 14px;
+        color:white; 
+        font-family: Segoe UI;
+        font-weight: 900;
+    }
+    .loading-progress{
+        position: fixed;
+        bottom:10%;
+    width: 80%;
+    height: 24px;
+    background-color: #36454F;
+    border-radius: 30px;
+    overflow: hidden;
+    border: 1px solid black;
+    margin-bottom: 0px;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        0 8px 16px rgba(0, 0, 0, 0.6),
+        inset 0 3px 20px rgba(0, 0, 0, 0.6),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+    }
+    .loading-progress-bar{
+      position: relative;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        #00ff3b 0%,
+        #00cc2e 25%,
+        #00b82a 50%,
+        #00cc2e 75%,
+        #00ff3b 100%
+    );
+    border-radius: 30px;
+    transition: width 0s ease;
+    box-shadow: inset 0 0 4px 2px rgba(255, 255, 255, 0.1);
+    );
+      animation: progress 1.8s ease-in-out infinite;
+    }
+    .loading-ads{ 
+        position:absolute; 
+        bottom: 10px; 
+        left:0; 
+        width:100%; 
+        text-align:center; 
+        font-size: 11px;
+        color:#dff8ef;
+        font-family: Segoe UI;
+        padding: 0 8px; 
+    }
+
+    /* FAB (kept logic and IDs) */
+    .fab-container{ position: fixed; 
+    z-index: 12000;
+    touch-action: auto;
+    }
+    .fab-button{
+      width: 40px;
+      height: 40px; 
+      border-radius:30px; 
+      border:1px solid rgba(219,22,987,0.9);
+      background:url("https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEifffG-8z1R1pNtzLOttJfZyZvbHwT54Gi_pb8aufQ0x3yGjsC9NJZGH3tu3_JDWDLEv_YqfvN6NzpoDXbCydlebRwV2p8c7glfG-8lgOL-QvQVzcr3URGygbSfUArhIA1NSxXebwDTNgouCLphxd-kn2hrnW8V3Lav2lA3xMvlShxcPq9iqwNbfSLPMxs/s16000/1000110664.gif");
+      color: #eafbf3;
+      background-size: 100% 100%;
+      font-size: 20px; 
+      display:flex; 
+      align-items:center;
+      justify-content:center;
+      position: fixed; 
+      cursor:pointer;
+      transition: var(--trans);
+      box-shadow:
+    0 0 20px 8px rgba(0, 0, 0, 0.3),  /* Outer black shadow */
+    inset 0 9px 18px rgba(319, 25, 705, 0.1),
+    inset 0 -6px 12px rgba(398, 0, 656, 0.1);
+      animation: gentlePulse 2.2s ease-in-out infinite;
+    }
+    .fab-button:active{ 
+        transform: scale(.96);
+    }
+
+    /* Animations */
+    @keyframes pulse{ 0%,100%{ transform: scale(1)} 50%{ transform: scale(1.06)} }
+    @keyframes progress{ 0%{ width:0% } 100%{ width:100% } }
+    @keyframes gentlePulse{ 0%,100%{ transform: scale(.96) } 50%{ transform: scale(1) } }
+    @keyframes pop{ from{ opacity:0; transform: translateY(8px)} to{opacity:1; transform:none} }
+    @keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
+
+  </style>
+</head>
+<body>
+
+  <!-- FAB (unchanged structure/IDs) -->
+  <div class="fab-container">
+    <button class="fab-button" id="fab"></button>
+  </div>
+
+  <!-- Back and records actions (IDs kept) -->
+  <a class="back-button" href="#"><i class="fas fa-angle-left"></i></a>
+  <button class="records-button" id="viewRecordsBtn"><i class="fas fa-book"></i></button>
+
+  <!-- Loading Screen (IDs unchanged) -->
+  <div class="loading-screen" id="loadingScreen">
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgrmw250uhAGFPSnWELpvvetMOTTb17bF6s6DUa_lI-EV8XA9mVueO0FTlNG9viGfJkBPf8SZWDXBLnr7basToREnNcTjGkFRQDmc8ecMgiemUJwgE-AsWxHEJWvoh_LMleafDMutUk7kbTAWuU79K10KqrjSTK4emQPX1alwn-Qz_OCW-8HAIuLANJl3U/s16000/1000095879.png" alt="App Logo" class="loading-logo">
+    <div class="loading-message">Loading your withdrawal dashboard...</div>
+    <div class="loading-progress"><div class="loading-progress-bar" id="loadingProgress"></div></div>
+    <div class="loading-ads">Fast withdrawals processed within minutes<br>Trusted by millions worldwide.</div>
+  </div>
+
+  <!-- Main Withdrawal Section -->
+  <div class="container" id="mainContainer">
+    <header>
+      <div class="logo">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgrmw250uhAGFPSnWELpvvetMOTTb17bF6s6DUa_lI-EV8XA9mVueO0FTlNG9viGfJkBPf8SZWDXBLnr7basToREnNcTjGkFRQDmc8ecMgiemUJwgE-AsWxHEJWvoh_LMleafDMutUk7kbTAWuU79K10KqrjSTK4emQPX1alwn-Qz_OCW-8HAIuLANJl3U/s16000/1000095879.png" alt="BankPay Logo">
+        BANK WITHDRAWALS
+      </div>
+      <div class="header-actions"></div>
+    </header>
+
+<!-- BANK/UPI DETAILS DISPLAY CARD -->
+<div class="bank-details-display" id="bankDetailsDisplay">
+  <!-- TITLE BAR -Not needed anymore as the Title is dorectly show on Tab-->
+  <!-- NEW: Method Selection Tabs -->
+    <div class="method-tabs" id="methodTabs">
+      <button class="method-tab active" data-method="imps">IMPS</button>
+      <button class="method-tab" data-method="upi">UPI</button>
+    </div>
+
+  <!-- INNER CONTENT AREA -->
+  <div class="bank-card-body" id="bankDetailsContent">
+    <!-- IMPS Details (default) -->
+    <div class="bank-row imps-details">
+      <div class="bank-label">Account No</div>
+      <div class="bank-value" id="displayAccountNumber">Not Set Yet</div>
+    </div>
+
+    <div class="bank-row imps-details">
+      <div class="bank-label">Name</div>
+      <div class="bank-value" id="displayAccountName">Not Set Yet</div>
+    </div>
+
+    <div class="bank-row imps-details">
+      <div class="bank-label">IFSC</div>
+      <div class="bank-value" id="displayIfsc">Not Set Yet</div>
+    </div>
+
+    <!-- UPI Details (hidden by default) -->
+    <div class="bank-row upi-details" style="display: none;">
+      <div class="bank-label">UPI ID</div>
+      <div class="bank-value" id="displayUpiId">Not Set Yet</div>
+    </div>
+
+    <div class="bank-row upi-details" style="display: none;">
+      <div class="bank-label">Name</div>
+      <div class="bank-value" id="displayUpiName">Not Set Yet</div>
+    </div>
+
+    <!-- RIGHT ARROW -->
+    <button class="edit-bank-btn" id="editBankBtn">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+    <!-- Updated balance display -->
+    <div class="balance-display animate__animated">
+      <div class="balance-label">BALANCE</div>
+      <div class="balance-amount" id="totalBalance">₹0.00</div>
+    </div>
+
+    <div class="card">
+      <div class="form-group">
+        <div class="amount-options">
+          <div class="withdraw-option" onclick="selectAmount(200)">
+            <div class="amount">₹200</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(500)">
+            <div class="amount">₹500</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(1000)">
+            <div class="amount">₹1000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+          <div class="withdraw-option" onclick="selectAmount(1500)">
+            <div class="amount">₹1500</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+          <div class="withdraw-option" onclick="selectAmount(2000)">
+            <div class="amount">₹2000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(5000)">
+            <div class="amount">₹5000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(10000)">
+            <div class="amount">₹10000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(15000)">
+            <div class="amount">₹15000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(20000)">
+            <div class="amount">₹20000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(50000)">
+            <div class="amount">₹50000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+           <div class="withdraw-option" onclick="selectAmount(100000)">
+            <div class="amount">₹100000</div>
+            <div class="label">₹10 service fees</div>
+          </div>
+          <div class="withdraw-option" onclick="selectAmount('custom')">
+            <div class="amount"><i class="fas fa-edit"></i></div>
+            <div class="label">Includes 3% tax</div>
+          </div>
+        </div>
+        <input type="number" id="customAmount" placeholder="Enter custom amount" min="200" style="display:none; margin-top:8px;" oninput="updateTaxCalculation()">
+      </div>
+
+      <div class="tax-calculation" id="taxCalculation">
+        <div class="tax-row"><span>Withdrawal Amount:</span><span id="calcAmount">₹0.00</span></div>
+        <div class="tax-row"><span>Service Fees:</span><span id="calcFee">₹0.00</span></div>
+        <div class="tax-row"><span>Tax (3%):</span><span id="calcTax">₹0.00</span></div>
+        <div class="tax-row tax-total"><span>Net Amount:</span><span id="calcNet">₹0.00</span></div>
+      </div>
+    </div>
+     <div class="button-container">
+      <button class="btn btn-primary" onclick="initiateWithdrawal()" id="withdrawBtn">Withdraw</button>
+    </div>
+  </div>
+
+  <!-- NEW: Bank/UPI Details Update Modal Section -->
+  <div class="bank-update-modal" id="bankUpdateModal">
+    <div class="bank-update-container">
+      <div class="bank-update-header">
+        <div class="logo">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgrmw250uhAGFPSnWELpvvetMOTTb17bF6s6DUa_lI-EV8XA9mVueO0FTlNG9viGfJkBPf8SZWDXBLnr7basToREnNcTjGkFRQDmc8ecMgiemUJwgE-AsWxHEJWvoh_LMleafDMutUk7kbTAWuU79K10KqrjSTK4emQPX1alwn-Qz_OCW-8HAIuLANJl3U/s16000/1000095879.png" alt="BankPay Logo">
+          Account Update
+        </div>
+        <div class="header-actions">
+          <button class="records-button" id="bankUpdateRecordsBtn" style="display:none;"><i class="fas fa-book"></i></button>
+          <button class="bank-update-back" id="bankUpdateBackBtn"><i class="fas fa-angle-left"></i></button>
+        </div>
+      </div>
+
+      <!-- NEW: Method Selection Tabs in Update Modal -->
+      <div class="method-tabs" id="updateMethodTabs">
+        <button class="method-tab active" data-method="imps">IMPS</button>
+        <button class="method-tab" data-method="upi">UPI</button>
+      </div>
+
+      <div class="balance-display animate__animated">
+        <div class="balance-label">TOTAL BALANCE</div>
+        <div class="balance-amount" id="updateTotalBalance">₹0.00</div>
+      </div>
+
+      <!-- IMPS Update Form -->
+      <div class="bank-update-form1" id="impsUpdateForm">
+        <div class="imps-header1">IMPS</div>
+
+        <div class="bank-row1">
+          <div class="bank-label1">Account No</div>
+          <input type="text" id="updateAccountNumber" placeholder="Enter Account No">
+        </div>
+
+        <div class="bank-row1">
+          <div class="bank-label1">Name</div>
+          <input type="text" id="updateAccountName" placeholder="Enter Ac Holder Name">
+        </div>
+
+        <div class="bank-row1">
+          <div class="bank-label1">IFSC</div>
+          <input type="text" id="updateIfsc" placeholder="Enter IFSC Code">
+        </div>
+      </div>
+
+      <!-- UPI Update Form (hidden by default) -->
+      <div class="bank-update-form1" id="upiUpdateForm" style="display: none;">
+        <div class="imps-header1">UPI</div>
+
+        <div class="bank-row1">
+          <div class="bank-label1">UPI ID</div>
+          <input type="text" id="updateUpiId" placeholder="Enter UPI ID (e.g., user@upi)">
+        </div>
+
+        <div class="bank-row1">
+          <div class="bank-label1">Name</div>
+          <input type="text" id="updateUpiName" placeholder="Enter UPI Holder Name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="button-container">
+          <button class="btn btn-success" onclick="confirmBankUpdateModal()" id="updateBankBtn" style="margin-top: 10px;">
+            <i class="fas fa-check-circle"></i> Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Records Modal (UPDATED with tab system) -->
+  <div class="records-modal" id="recordsModal">
+    <div class="records-content">
+      <div class="records-header">
+        <div class="records-title">WITHDRAW RECORD</div>
+        <button class="records-close" id="closeRecords"><i class="fas fa-circle-xmark"></i></button>
+      </div>
+      
+      <!-- NEW: Tab system -->
+      <div class="records-tabs">
+        <button class="records-tab active" data-status="pending">processing</button>
+        <button class="records-tab" data-status="processing">Transfering</button>
+        <button class="records-tab" data-status="success">Success</button>
+        <button class="records-tab" data-status="failed">Failed</button>
+      </div>
+      <div class="records-container">
+        <div id="recordsList">
+          <!-- Records will be loaded here based on selected tab -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup (structure kept) -->
+  <div class="popup-container" id="popupContainer">
+    <div class="popup-content">
+      <button class="popup-close" id="popupClose">×</button>
+      <div class="popup-title" id="popupTitle">Confirm Withdrawal</div>
+      <div class="popup-message" id="popupMessage">
+        Review your details before confirming.
+      </div>
+      <div class="popup-buttons">
+        <button class="btn btn-primary" id="popupCancel">Cancel</button>
+        <button class="btn btn-success" id="popupConfirm">Confirm</button>
+        <button class="btn btn-primary" id="popupCloseBtn" style="display:none;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sound Effects -->
+  <audio id="successSound" src="https://audio.jukehost.co.uk/OLGDJHjxIY9cMiUPOYPGkGavKoFDVVwY" preload="auto"></audio>
+  <audio id="errorSound" src="https://audio.jukehost.co.uk/7h9Ng4dbLQkq49TkwVVjBJXAtkzYUXSs" preload="auto"></audio>
+  <audio id="clickSound" src="https://audio.jukehost.co.uk/SOrgXYyuSDba9zvEdeTW8RrOGMrYd9y0" preload="auto"></audio>
+  <audio id="notificationSound" src="https://audio.jukehost.co.uk/esNyil7go7uL10qtRvxEtb8yLwwm7iFC" preload="auto"></audio>
+  <audio id="cashSound" src="https://audio.jukehost.co.uk/n8rlkq38J4IS24A1ajbgMewJx7HeswHz" preload="auto"></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0Ne46PQqmvUnsq89GUJlKfLpWvsHmtbk",
+    authDomain: "kimi-win-90b82.firebaseapp.com",
+    databaseURL: "https://kimi-win-90b82-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "kimi-win-90b82",
+    storageBucket: "kimi-win-90b82.appspot.com",
+    messagingSenderId: "889222798634",
+    appId: "1:889222798634:web:86770b996003152f19d253"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const database = firebase.database();
+
+  // Track current action for confirmation modal
+  let currentAction = null;
+  let currentTab = 'pending'; // Track current tab
+  let currentMethod = 'imps'; // Track current withdrawal method (imps or upi)
+
+  // Generate cryptographically secure random 12-digit number
+  function generateSecureRandom12Digits() {
+    // Create array for 12 digits
+    const digits = new Uint8Array(12);
+    
+    // Generate cryptographically secure random values
+    window.crypto.getRandomValues(digits);
+    
+    // Convert each byte to a digit 0-9
+    let result = '';
+    for (let i = 0; i < 12; i++) {
+      result += (digits[i] % 10).toString();
+    }
+    
+    return result;
+  }
+
+  // Generate order ID in format: WOR + 12 random digits + 2-digit date
+  function generateOrderId() {
+    const prefix = 'WOR';
+    const randomDigits = generateSecureRandom12Digits();
+    
+    // Get current date in Indian timezone
+    const now = new Date();
+    const indianDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+    const dayOfMonth = indianDate.getDate();
+    
+    // Format day as 2 digits (01-31)
+    const dayString = dayOfMonth.toString().padStart(2, '0');
+    
+    // Combine to create 18-character order ID
+    const orderId = prefix + randomDigits + dayString;
+    
+    return orderId;
+  }
+
+  // Check authentication status
+  function checkAuth() {
+    const uid = localStorage.getItem('uid');
+    if (!uid) {
+      if (confirm('You need to sign in to access this page. Would you like to go to the login page?')) {
+        window.location.href = 'index.html';
+      }
+      return false;
+    }
+    return true;
+  }
+
+  // Switch between IMPS and UPI methods
+  function switchMethod(method) {
+    currentMethod = method;
+    
+    // Update method tabs
+    document.querySelectorAll('.method-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    document.querySelectorAll(`.method-tab[data-method="${method}"]`).forEach(tab => {
+      tab.classList.add('active');
+    });
+    
+    // Show/hide appropriate details
+    if (method === 'imps') {
+      // Show IMPS details, hide UPI details
+      document.querySelectorAll('.imps-details').forEach(el => el.style.display = 'flex');
+      document.querySelectorAll('.upi-details').forEach(el => el.style.display = 'none');
+    } else {
+      // Show UPI details, hide IMPS details
+      document.querySelectorAll('.imps-details').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.upi-details').forEach(el => el.style.display = 'flex');
+    }
+    
+    // Load user data to refresh display
+    loadUserData();
+  }
+
+  // Switch between IMPS and UPI methods in update modal
+  function switchUpdateMethod(method) {
+    // Update method tabs in update modal
+    document.querySelectorAll('#updateMethodTabs .method-tab').forEach(tab => {
+      tab.classList.remove('active');
+    });
+    document.querySelector(`#updateMethodTabs .method-tab[data-method="${method}"]`).classList.add('active');
+    
+    // Show/hide appropriate update forms
+    if (method === 'imps') {
+      document.getElementById('impsUpdateForm').style.display = 'block';
+      document.getElementById('upiUpdateForm').style.display = 'none';
+    } else {
+      document.getElementById('impsUpdateForm').style.display = 'none';
+      document.getElementById('upiUpdateForm').style.display = 'block';
+    }
+  }
+
+  // Load user data from Firebase and update bank/UPI details display
+  function loadUserData() {
+    const uid = localStorage.getItem('uid');
+    if (!uid) {
+      checkAuth();
+      return;
+    }
+
+    database.ref('appusers/' + uid).once('value').then(snapshot => {
+      const userData = snapshot.val();
+      if (userData) {
+        // Only use totalBalance now
+        let totalBalance = userData.totalBalance || 0;
+
+        document.getElementById('totalBalance').textContent = `₹${totalBalance.toFixed(2)}`;
+        document.getElementById('updateTotalBalance').textContent = `₹${totalBalance.toFixed(2)}`;
+        
+        // Load bank details if they exist
+        if (userData.BankDetails) {
+          const bankDetails = userData.BankDetails;
+          
+          // Update display section for IMPS
+          document.getElementById('displayAccountNumber').textContent = bankDetails.accountNumber || 'Not set';
+          document.getElementById('displayIfsc').textContent = bankDetails.ifscCode || 'Not set';
+          document.getElementById('displayAccountName').textContent = bankDetails.accountName || 'Not set';
+          
+          // Update form fields in update modal for IMPS
+          document.getElementById('updateAccountNumber').value = bankDetails.accountNumber || '';
+          document.getElementById('updateAccountName').value = bankDetails.accountName || '';
+          document.getElementById('updateIfsc').value = bankDetails.ifscCode || '';
+        } else {
+          // Clear display if no bank details
+          document.getElementById('displayAccountNumber').textContent = 'Not set';
+          document.getElementById('displayIfsc').textContent = 'Not set';
+          document.getElementById('displayAccountName').textContent = 'Not set';
+        }
+        
+        // Load UPI details if they exist
+        if (userData.UPIDetails) {
+          const upiDetails = userData.UPIDetails;
+          
+          // Update display section for UPI
+          document.getElementById('displayUpiId').textContent = upiDetails.upiId || 'Not set';
+          document.getElementById('displayUpiName').textContent = upiDetails.upiName || 'Not set';
+          
+          // Update form fields in update modal for UPI
+          document.getElementById('updateUpiId').value = upiDetails.upiId || '';
+          document.getElementById('updateUpiName').value = upiDetails.upiName || '';
+        } else {
+          // Clear display if no UPI details
+          document.getElementById('displayUpiId').textContent = 'Not set';
+          document.getElementById('displayUpiName').textContent = 'Not set';
+        }
+      }
+    }).catch(error => {
+      console.error("Error loading user data:", error);
+      toastr.error("Failed to load user data");
+    });
+  }
+
+  // Show bank/UPI update modal
+  function showBankUpdateModal() {
+    // Set the current method in update modal to match the main display
+    switchUpdateMethod(currentMethod);
+    
+    document.getElementById('mainContainer').style.display = 'none';
+    document.getElementById('bankUpdateModal').style.display = 'block';
+    document.getElementById('back-button').style.display = 'none';
+    document.getElementById('viewRecordsBtn').style.display = 'none';
+    playSound('notificationSound');
+  }
+
+  // Hide bank/UPI update modal and return to main section
+  function hideBankUpdateModal() {
+    document.getElementById('bankUpdateModal').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'flex';
+    document.getElementById('back-button').style.display = 'flex';
+    document.getElementById('viewRecordsBtn').style.display = 'flex';
+    playSound('clickSound');
+  }
+
+  // Validate and save bank/UPI details from update modal
+  function confirmBankUpdateModal() {
+    if (!checkAuth()) return;
+
+    const uid = localStorage.getItem('uid');
+    const updateMethod = document.querySelector('#updateMethodTabs .method-tab.active').getAttribute('data-method');
+    
+    if (updateMethod === 'imps') {
+      // Validate and save IMPS details
+      const bankDetails = {
+        accountNumber: document.getElementById('updateAccountNumber').value.trim(),
+        ifscCode: document.getElementById('updateIfsc').value.trim().toUpperCase(),
+        accountName: document.getElementById('updateAccountName').value.trim()
+      };
+
+      // Validate inputs
+      if (!bankDetails.accountNumber || !bankDetails.ifscCode || !bankDetails.accountName) {
+        showMessagePopup('Please fill all bank details!');
+        playSound('errorSound');
+        return;
+      }
+
+      if (bankDetails.accountNumber.length < 9 || bankDetails.accountNumber.length > 18) {
+        showMessagePopup('Account number must be between 9-18 digits!');
+        playSound('errorSound');
+        return;
+      }
+
+      if (!bankDetails.ifscCode.match(/^[A-Z]{4}0[A-Z0-9]{6}$/)) {
+        showMessagePopup('Invalid IFSC code format!');
+        playSound('errorSound');
+        return;
+      }
+
+      // Prepare data for Firebase
+      const bankData = {
+        accountNumber: bankDetails.accountNumber,
+        ifscCode: bankDetails.ifscCode,
+        accountName: bankDetails.accountName
+      };
+
+      // Save to Firebase
+      database.ref('appusers/' + uid + '/BankDetails').set(bankData)
+        .then(() => {
+          showSuccessPopup('Bank details updated successfully!');
+          playSound('successSound');
+          // Update display immediately
+          loadUserData();
+          // Return to main section after 1.5 seconds
+          setTimeout(hideBankUpdateModal, 1500);
+        })
+        .catch(error => {
+          console.error("Error updating bank details:", error);
+          showMessagePopup('Failed to update bank details. Please try again.');
+          playSound('errorSound');
+        });
+    } else {
+      // Validate and save UPI details
+      const upiDetails = {
+        upiId: document.getElementById('updateUpiId').value.trim(),
+        upiName: document.getElementById('updateUpiName').value.trim()
+      };
+
+      // Validate inputs
+      if (!upiDetails.upiId || !upiDetails.upiName) {
+        showMessagePopup('Please fill all UPI details!');
+        playSound('errorSound');
+        return;
+      }
+
+      // Validate UPI ID format
+      if (!upiDetails.upiId.match(/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/)) {
+        showMessagePopup('Invalid UPI ID format! Please use format: user@upi');
+        playSound('errorSound');
+        return;
+      }
+
+      // Prepare data for Firebase
+      const upiData = {
+        upiId: upiDetails.upiId,
+        upiName: upiDetails.upiName
+      };
+
+      // Save to Firebase
+      database.ref('appusers/' + uid + '/UPIDetails').set(upiData)
+        .then(() => {
+          showSuccessPopup('UPI details updated successfully!');
+          playSound('successSound');
+          // Update display immediately
+          loadUserData();
+          // Return to main section after 1.5 seconds
+          setTimeout(hideBankUpdateModal, 1500);
+        })
+        .catch(error => {
+          console.error("Error updating UPI details:", error);
+          showMessagePopup('Failed to update UPI details. Please try again.');
+          playSound('errorSound');
+        });
+    }
+  }
+
+  // Validate withdrawal amount
+  function isValidWithdrawalAmount(amount) {
+    // Check if amount is at least 200
+    if (amount < 200) return false;
+    
+    // Check if amount follows the pattern: 200,300,400,500,600,700,800,900,1000,1100,1200, etc.
+    // This means amounts should be in increments of 100 starting from 200
+    return amount % 100 === 0 && amount >= 200;
+  }
+
+  // Process withdrawal
+  function processWithdrawal() {
+    if (!checkAuth()) return;
+
+    const uid = localStorage.getItem('uid');
+    const amount = parseFloat(document.getElementById('customAmount').value) || 200;
+    const tax = amount * 0.03;
+    const serviceFee = 10; // Fixed ₹10 for all withdrawals
+    const totalAmount = amount + tax + serviceFee;
+
+    // Validate withdrawal amount
+    if (!isValidWithdrawalAmount(amount)) {
+      showMessagePopup('Invalid withdrawal amount! Please use amounts like 200, 300, 400, etc. (increments of 100 starting from 200)');
+      playSound('errorSound');
+      return;
+    }
+
+    let withdrawalDetails = {};
+    
+    if (currentMethod === 'imps') {
+      // Get bank details from display
+      withdrawalDetails = {
+        method: 'imps',
+        accountNumber: document.getElementById('displayAccountNumber').textContent,
+        ifscCode: document.getElementById('displayIfsc').textContent,
+        accountName: document.getElementById('displayAccountName').textContent
+      };
+
+      // Check if bank details are set
+      if (withdrawalDetails.accountNumber === 'Not set' || withdrawalDetails.ifscCode === 'Not set' || withdrawalDetails.accountName === 'Not set') {
+        showMessagePopup('Please add your bank details first! Click the edit button to add bank details.');
+        playSound('errorSound');
+        return;
+      }
+    } else {
+      // Get UPI details from display
+      withdrawalDetails = {
+        method: 'upi',
+        upiId: document.getElementById('displayUpiId').textContent,
+        upiName: document.getElementById('displayUpiName').textContent
+      };
+
+      // Check if UPI details are set
+      if (withdrawalDetails.upiId === 'Not set' || withdrawalDetails.upiName === 'Not set') {
+        showMessagePopup('Please add your UPI details first! Click the edit button to add UPI details.');
+        playSound('errorSound');
+        return;
+      }
+    }
+
+    // Check balance
+    database.ref('appusers/' + uid).once('value').then(snapshot => {
+      const userData = snapshot.val();
+      const totalBalance = userData.totalBalance || 0;
+
+      if (totalAmount > totalBalance) {
+        showMessagePopup(`Insufficient balance! You need ₹${totalAmount.toFixed(2)} but only have ₹${totalBalance.toFixed(2)} available.`);
+        playSound('errorSound');
+        return;
+      }
+
+      // Generate new order ID
+      const withdrawalId = generateOrderId();
+      const withdrawalData = {
+        amount: amount,
+        fee: tax,
+        serviceFee: serviceFee,
+        status: 'pending',
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        method: currentMethod,
+        withdrawalDetails: withdrawalDetails
+      };
+
+      // Update balance and save withdrawal
+      const updates = {};
+      const newTotalBalance = Math.max(totalBalance - totalAmount, 0);
+
+      updates['totalBalance'] = newTotalBalance;
+      updates['withdrawalHistory/' + withdrawalId] = withdrawalData;
+
+      database.ref('appusers/' + uid).update(updates)
+        .then(() => {
+          let methodText = currentMethod === 'imps' ? 'Bank (IMPS)' : 'UPI';
+          const message = `
+            <div style="text-align: left;">
+              <p style="font-weight: 900; color:rgba(255,255,255,0.7); margin-bottom: 5px; text-align:left;">Withdrawal Request Submit Successful!</p>
+              <p><span style="display: inline-block; width: 100px;">Amount:</span> <strong>₹${amount.toFixed(2)}</strong></p>
+              <p><span style="display: inline-block; width: 100px;">Service Fee:</span> <strong>₹${serviceFee.toFixed(2)}</strong></p>
+              <p><span style="display: inline-block; width: 100px;">Tax (3%):</span> <strong>₹${tax.toFixed(2)}</strong></p>
+              <p><span style="display: inline-block; width: 100px;">Total:</span> <strong>₹${totalAmount.toFixed(2)}</strong></p>
+              <hr style="border: none; border-top: 1px dashed #ddd; margin: 6px 0;">
+              <p><span style="display: inline-block; width: 100px;">Method:</span> <strong>${methodText}</strong></p>
+              <p><span style="display: inline-block; width: 100px;">Order ID:</span> <strong>${withdrawalId}</strong></p>
+              <p style="margin-top: 5px; font-size: 9px; color:#12AD2B;">Your withdrawal request is being processed.<br> It may take 3-7 business days for Bank Settlement.</p>
+            </div>
+          `;
+          
+          showSuccessPopup(message);
+          playSound('cashSound');
+          loadUserData(); // Refresh balance
+        })
+        .catch(error => {
+          console.error("Error processing withdrawal:", error);
+          showMessagePopup('Failed to process withdrawal. Please try again.');
+          playSound('errorSound');
+        });
+    });
+  }
+
+  // Initiate withdrawal (confirmation)
+  function initiateWithdrawal() {
+    const amount = parseFloat(document.getElementById('customAmount').value) || 200;
+    
+    // Validate minimum withdrawal amount
+    if (amount < 200) {
+      showMessagePopup('Minimum withdrawal amount is ₹200!');
+      playSound('errorSound');
+      return;
+    }
+
+    // Validate withdrawal amount pattern
+    if (!isValidWithdrawalAmount(amount)) {
+      showMessagePopup('Invalid withdrawal amount! Please use amounts like 200, 300, 400, etc. (increments of 100 starting from 200)');
+      playSound('errorSound');
+      return;
+    }
+
+    const tax = amount * 0.03;
+    const serviceFee = 10; // Fixed ₹10 for all withdrawals
+    const totalAmount = amount + tax + serviceFee;
+
+    let withdrawalDetails = {};
+    let methodText = '';
+    
+    if (currentMethod === 'imps') {
+      // Get bank details from display
+      withdrawalDetails = {
+        method: 'imps',
+        accountNumber: document.getElementById('displayAccountNumber').textContent,
+        ifscCode: document.getElementById('displayIfsc').textContent,
+        accountName: document.getElementById('displayAccountName').textContent
+      };
+      methodText = 'Bank (IMPS)';
+
+      // Check if bank details are set
+      if (withdrawalDetails.accountNumber === 'Not set' || withdrawalDetails.ifscCode === 'Not set' || withdrawalDetails.accountName === 'Not set') {
+        showMessagePopup('Please add your bank details first! Click the edit button to add bank details.');
+        playSound('errorSound');
+        return;
+      }
+    } else {
+      // Get UPI details from display
+      withdrawalDetails = {
+        method: 'upi',
+        upiId: document.getElementById('displayUpiId').textContent,
+        upiName: document.getElementById('displayUpiName').textContent
+      };
+      methodText = 'UPI';
+
+      // Check if UPI details are set
+      if (withdrawalDetails.upiId === 'Not set' || withdrawalDetails.upiName === 'Not set') {
+        showMessagePopup('Please add your UPI details first! Click the edit button to add UPI details.');
+        playSound('errorSound');
+        return;
+      }
+    }
+
+    // Show confirmation popup
+    let detailsHtml = '';
+    if (currentMethod === 'imps') {
+      detailsHtml = `
+        <p><span style="display: inline-block; width: 120px;">Account:</span> <strong>${withdrawalDetails.accountNumber}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">IFSC:</span> <strong>${withdrawalDetails.ifscCode}</strong></p>
+      `;
+    } else {
+      detailsHtml = `
+        <p><span style="display: inline-block; width: 120px;">UPI ID:</span> <strong>${withdrawalDetails.upiId}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Name:</span> <strong>${withdrawalDetails.upiName}</strong></p>
+      `;
+    }
+
+    const message = `
+      <div style="text-align: left;">
+        <p style="font-weight: 900; color:rgba(255,255,255,0.7); margin-bottom: 5px; text-align:left;">Confirm Amount and account details</p>
+        <p><span style="display: inline-block; width: 120px;">Method:</span> <strong>${methodText}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Amount:</span> <strong>₹${amount.toFixed(2)}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Service Fee:</span> <strong>₹${serviceFee.toFixed(2)}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Tax (3%):</span> <strong>₹${tax.toFixed(2)}</strong></p>
+        <p><span style="display: inline-block; width: 120px;">Total:</span> <strong>₹${totalAmount.toFixed(2)}</strong></p>
+        <hr style="border: none; border-top: 1px dashed #ddd; margin: 6px 0;">
+        ${detailsHtml}
+        <p style="margin-top: 5px; font-size: 10px; color:#12AD2B;">Please confirm to proceed with withdrawal.</p>
+      </div>
+    `;
+
+    showConfirmationPopup('Confirm Withdrawal', message, 'withdrawal');
+  }
+
+  // Load withdrawal history with tab system
+  function loadWithdrawalHistory(status = 'pending') {
+    const uid = localStorage.getItem('uid');
+    if (!uid) return;
+
+    database.ref('appusers/' + uid + '/withdrawalHistory').once('value').then(snapshot => {
+        const recordsList = document.getElementById('recordsList');
+        recordsList.innerHTML = '';
+
+        const withdrawals = snapshot.val() || {};
+        if (Object.keys(withdrawals).length === 0) {
+            recordsList.innerHTML = '<div class="no-records">No withdrawal records found</div>';
+            return;
+        }
+
+        // Convert withdrawals object to array and sort by timestamp (newest first)
+        const sortedWithdrawals = Object.entries(withdrawals)
+            .map(([withdrawalId, withdrawal]) => ({
+                id: withdrawalId,
+                ...withdrawal
+            }))
+            .filter(withdrawal => withdrawal.status === status)
+            .sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp descending
+
+        if (sortedWithdrawals.length === 0) {
+            recordsList.innerHTML = `<div class="no-records">No withdrawal records found</div>`;
+            return;
+        }
+
+        // Loop through sorted withdrawals
+        sortedWithdrawals.forEach(withdrawal => {
+            // Format date to Indian timezone in 12-hour format
+            const date = new Date(withdrawal.timestamp);
+            const options = { 
+                timeZone: 'Asia/Kolkata',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+            const formattedDate = date.toLocaleString('en-IN', options);
+            
+            // Create withdrawal record row based on method
+            const recordItem = document.createElement('div');
+            recordItem.className = 'withdrawal-record';
+            
+            let detailsHtml = '';
+            if (withdrawal.method === 'imps') {
+                detailsHtml = `
+                    <div class="record-row">
+                        <div class="record-label">Account</div>
+                        <div class="record-value">${withdrawal.withdrawalDetails?.accountNumber || 'N/A'}</div>
+                    </div>
+
+                    <div class="record-row">
+                        <div class="record-label">IFSC</div>
+                        <div class="record-value">${withdrawal.withdrawalDetails?.ifscCode || 'N/A'}</div>
+                    </div>
+                `;
+            } else {
+                detailsHtml = `
+                    <div class="record-row">
+                        <div class="record-label">UPI ID</div>
+                        <div class="record-value">${withdrawal.withdrawalDetails?.upiId || 'N/A'}</div>
+                    </div>
+
+                    <div class="record-row">
+                        <div class="record-label">Name</div>
+                        <div class="record-value">${withdrawal.withdrawalDetails?.upiName || 'N/A'}</div>
+                    </div>
+                `;
+            }
+            
+            recordItem.innerHTML = `
+                <div class="record-section">
+                    <div class="record-label">${withdrawal.method === 'imps' ? 'Bank' : 'UPI'}</div>
+                    <div class="record-value">+ ₹${withdrawal.amount.toFixed(0)}</div>
+                    <div class="record-time">${formattedDate}</div>
+                    <div class="record-divider"></div>
+                </div>
+
+                <div class="record-row">
+                    <div class="record-label">Withdrawal ID</div>
+                    <div class="record-value">${withdrawal.id}</div>
+                </div>
+
+                ${detailsHtml}
+                <div class="record-divider2"></div>
+            `;
+            
+            recordsList.appendChild(recordItem);
+        });
+    });
+  }
+
+  // NEW: Switch between tabs
+  function switchTab(status) {
+    // Update active tab
+    document.querySelectorAll('.records-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    document.querySelector(`.records-tab[data-status="${status}"]`).classList.add('active');
+    
+    // Update current tab and load records
+    currentTab = status;
+    loadWithdrawalHistory(status);
+  }
+
+  // UI Functions
+  function showConfirmationPopup(title, message, action) {
+    const popupContainer = document.getElementById('popupContainer');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupConfirm = document.getElementById('popupConfirm');
+    const popupCancel = document.getElementById('popupCancel');
+    const popupCloseBtn = document.getElementById('popupCloseBtn');
+    
+    // Set title and message
+    popupTitle.textContent = title;
+    popupMessage.innerHTML = message;
+    
+    // Show confirmation buttons, hide close button
+    popupConfirm.style.display = 'block';
+    popupCancel.style.display = 'block';
+    popupCloseBtn.style.display = 'none';
+    
+    // Set current action
+    currentAction = action;
+    
+    // Set up confirm button based on action
+    popupConfirm.onclick = function() {
+      if (currentAction === 'withdrawal') {
+        processWithdrawal();
+      }
+      hidePopup();
+    };
+    
+    popupContainer.style.display = 'flex';
+    playSound('notificationSound');
+  }
+
+  function showSuccessPopup(message) {
+    const popupContainer = document.getElementById('popupContainer');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupConfirm = document.getElementById('popupConfirm');
+    const popupCancel = document.getElementById('popupCancel');
+    const popupCloseBtn = document.getElementById('popupCloseBtn');
+    
+    // Set title and message
+    popupTitle.textContent = 'Success';
+    popupMessage.innerHTML = message;
+    
+    // Hide confirmation buttons, show close button
+    popupConfirm.style.display = 'none';
+    popupCancel.style.display = 'none';
+    popupCloseBtn.style.display = 'block';
+    
+    popupContainer.style.display = 'flex';
+    playSound('notificationSound');
+  }
+
+  function showMessagePopup(message) {
+    const popupContainer = document.getElementById('popupContainer');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupConfirm = document.getElementById('popupConfirm');
+    const popupCancel = document.getElementById('popupCancel');
+    const popupCloseBtn = document.getElementById('popupCloseBtn');
+    
+    // Set title and message
+    popupTitle.textContent = 'Notice';
+    popupMessage.innerHTML = message;
+    
+    // Hide confirmation buttons, show close button
+    popupConfirm.style.display = 'none';
+    popupCancel.style.display = 'none';
+    popupCloseBtn.style.display = 'block';
+    
+    popupContainer.style.display = 'flex';
+    playSound('notificationSound');
+  }
+
+  function hidePopup() {
+    document.getElementById('popupContainer').style.display = 'none';
+    playSound('clickSound');
+    currentAction = null;
+  }
+
+  function showRecordsModal() {
+    document.getElementById('recordsModal').style.display = 'flex';
+    loadWithdrawalHistory(currentTab);
+    playSound('notificationSound');
+  }
+
+  function hideRecordsModal() {
+    document.getElementById('recordsModal').style.display = 'none';
+    playSound('notificationSound');
+  }
+
+  function selectAmount(amount) {
+    document.querySelectorAll('.withdraw-option').forEach(btn => {
+      btn.classList.remove('selected');
+    });
+    event.currentTarget.classList.add('selected');
+    
+    const customInput = document.getElementById('customAmount');
+    customInput.style.display = 'none';
+    customInput.value = '';
+    
+    if (amount === 'custom') {
+      customInput.style.display = 'block';
+      customInput.focus();
+    } else {
+      customInput.value = amount;
+    }
+    
+    setTimeout(updateTaxCalculation, 50);
+  }
+
+  function updateTaxCalculation() {
+    let amount = parseFloat(document.getElementById('customAmount').value) || 0;
+    const serviceFee = 10; // Fixed ₹10 for all withdrawals
+    const tax = amount * 0.03;
+    const total = amount + tax + serviceFee;
+    
+    if (amount > 0) {
+      document.getElementById('taxCalculation').style.display = 'block';
+      document.getElementById('calcAmount').textContent = `₹${amount.toFixed(2)}`;
+      document.getElementById('calcFee').textContent = `₹${serviceFee.toFixed(2)}`;
+      document.getElementById('calcTax').textContent = `₹${tax.toFixed(2)}`;
+      document.getElementById('calcNet').textContent = `₹${total.toFixed(2)}`;
+    } else {
+      document.getElementById('taxCalculation').style.display = 'none';
+    }
+  }
+
+  function playSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+      sound.currentTime = 0;
+      sound.play().catch(e => console.log("Sound play prevented:", e));
+    }
+  }
+
+  // Initialize the page
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check authentication first
+    if (!checkAuth()) return;
+
+    // Load user data
+    loadUserData();
+
+    // Set up event listeners
+    document.getElementById('customAmount').addEventListener('input', updateTaxCalculation);
+    
+    document.querySelectorAll('.withdraw-option').forEach(btn => {
+      btn.addEventListener('click', function() {
+        playSound('clickSound');
+        setTimeout(updateTaxCalculation, 50);
+      });
+    });
+    
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function() {
+        playSound('clickSound');
+        this.classList.add('button-click');
+        setTimeout(() => {
+          this.classList.remove('button-click');
+        }, 300);
+      });
+    });
+    
+    // NEW: Set up method tab event listeners
+    document.querySelectorAll('#methodTabs .method-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const method = this.getAttribute('data-method');
+            switchMethod(method);
+        });
+    });
+    
+    // NEW: Set up update method tab event listeners
+    document.querySelectorAll('#updateMethodTabs .method-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const method = this.getAttribute('data-method');
+            switchUpdateMethod(method);
+        });
+    });
+    
+    // NEW: Set up records tab event listeners
+    document.querySelectorAll('.records-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const status = this.getAttribute('data-status');
+            switchTab(status);
+        });
+    });
+    
+    // NEW: Edit bank/UPI button
+    document.getElementById('editBankBtn').addEventListener('click', showBankUpdateModal);
+    
+    // NEW: Bank/UPI update back button
+    document.getElementById('bankUpdateBackBtn').addEventListener('click', hideBankUpdateModal);
+    
+    document.getElementById('viewRecordsBtn').addEventListener('click', showRecordsModal);
+    document.getElementById('closeRecords').addEventListener('click', hideRecordsModal);
+    document.getElementById('popupClose').addEventListener('click', hidePopup);
+    document.getElementById('popupCancel').addEventListener('click', hidePopup);
+    document.getElementById('popupCloseBtn').addEventListener('click', hidePopup);
+
+    // Hide loading screen
+    setTimeout(() => {
+      document.getElementById('loadingProgress').style.width = '100%';
+      setTimeout(() => {
+        document.getElementById('loadingScreen').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('loadingScreen').style.display = 'none';
+        }, 300);
+      }, 500);
+    }, 1500);
+
+    // Select default amount
+    selectAmount(200);
+  });
+</script>
+
+  <!-- Kept original JS behaviors and IDs -->
+  <script>
+    // Back button behavior (unchanged)
+    document.querySelector('.back-button').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.history.length > 1) { window.history.back(); }
+      else { window.location.href = 'home.html'; }
+    });
+
+    // Draggable FAB logic (IDs and behavior preserved)
+    document.addEventListener('DOMContentLoaded', function() {
+      const fab = document.getElementById('fab');
+      const maxWidth = window.innerWidth;
+      const maxHeight = window.innerHeight;
+      const fabSize = 52;
+
+      let posX = window.innerWidth - fabSize - 10;
+      let posY = window.innerHeight - fabSize - 10;
+      let velX = 0, velY = 0;
+      let lastTime;
+      let isDragging = false;
+      let dragStartX, dragStartY;
+      let touchId = null;
+      let tapStartTime = 0;
+      let tapStartX = 0;
+      let tapStartY = 0;
+
+      fab.style.left = posX + 'px';
+      fab.style.top = posY + 'px';
+
+      const friction = 0.92;
+      const bounce = -0.7;
+      const throwFactor = -1;
+      const tapThreshold = 10;
+      const tapTimeThreshold = 180;
+
+      fab.addEventListener('touchstart', handleTouchStart, { passive: false });
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      document.addEventListener('touchend', handleTouchEnd);
+
+      requestAnimationFrame(updatePosition);
+
+      function handleTouchStart(e) {
+        if (touchId !== null) return;
+        const touch = e.touches[0];
+        touchId = touch.identifier;
+        tapStartTime = Date.now();
+        tapStartX = touch.clientX;
+        tapStartY = touch.clientY;
+        startDrag(touch.clientX, touch.clientY);
+        e.preventDefault();
+      }
+      function handleTouchMove(e) {
+        if (!isDragging) return;
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          if (t.identifier === touchId) {
+            updateDrag(t.clientX, t.clientY);
+            e.preventDefault();
+            break;
+          }
+        }
+      }
+      function handleTouchEnd(e) {
+        if (!isDragging) return;
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          if (t.identifier === touchId) {
+            const dx = Math.abs(t.clientX - tapStartX);
+            const dy = Math.abs(t.clientY - tapStartY);
+            const tapDuration = Date.now() - tapStartTime;
+            if (dx < tapThreshold && dy < tapThreshold && tapDuration < tapTimeThreshold) {
+              window.location.href = 'chat.html';
+            }
+            endDrag();
+            touchId = null;
+            break;
+          }
+        }
+      }
+      function startDrag(x, y) {
+        isDragging = true;
+        fab.style.animation = 'none';
+        fab.style.cursor = 'grabbing';
+        fab.style.transition = 'none';
+        dragStartX = x - posX;
+        dragStartY = y - posY;
+        velX = 0; velY = 0;
+      }
+      function updateDrag(x, y) {
+        const newX = x - dragStartX;
+        const newY = y - dragStartY;
+        if (lastTime) {
+          const now = performance.now();
+          const dt = (now - lastTime) / 1000;
+          if (dt > 0) {
+            velX = (newX - posX) / dt * throwFactor;
+            velY = (newY - posY) / dt * throwFactor;
+          }
+        }
+        posX = newX; posY = newY;
+        lastTime = performance.now();
+        constrain(); render();
+      }
+      function endDrag() {
+        isDragging = false;
+        fab.style.cursor = 'pointer';
+        fab.style.transition = 'transform .25s var(--trans)';
+        if (posY <= 0) { velY = Math.abs(velY) * bounce; }
+        else if (posY >= maxHeight - fabSize) { velY = -Math.abs(velY) * bounce; }
+        if (posX <= 0) { velX = Math.abs(velX) * bounce; }
+        else if (posX >= maxWidth - fabSize) { velX = -Math.abs(velX) * bounce; }
+      }
+      function constrain() {
+        posX = Math.max(0, Math.min(posX, maxWidth - fabSize));
+        posY = Math.max(0, Math.min(posY, maxHeight - fabSize));
+      }
+      function render() {
+        fab.style.left = posX + 'px';
+        fab.style.top = posY + 'px';
+      }
+      function updatePosition(ts) {
+        if (!isDragging) {
+          if (lastTime) {
+            const dt = (ts - lastTime) / 1000;
+            velX *= friction; velY *= friction;
+            posX += velX * dt; posY += velY * dt;
+            if (posX < 0){ posX = 0; velX = -velX * bounce; }
+            else if (posX > maxWidth - fabSize){ posX = maxWidth - fabSize; velX = -velX * bounce; }
+            if (posY < 0){ posY = 0; velY = -velY * bounce; }
+            else if (posY > maxHeight - fabSize){ posY = maxHeight - fabSize; velY = -velY * bounce; }
+            render();
+          }
+        }
+        lastTime = ts;
+        requestAnimationFrame(updatePosition);
+      }
+    });
+  </script>
+</body>
+</html>
