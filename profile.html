@@ -207,59 +207,7 @@
     }
 
     .profile-tabs {
-      display: flex;
-      margin-bottom: 5px;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 20px;
-      background-size: 100% 100%;
-      border: 1px solid rgba(210, 25, 226, 0.3);
-      padding: 0px;
-      position: relative;
-      font-size: 10px;
-      height:40px;
-      overflow: hidden;
-    }
-
-    .profile-tabs::before {
-      content: '';
-      position: absolute;
-      top: 3.5px;
-      left: 3px;
-      width: calc(50% - 5px);
-      height: calc(100% - 10px);
-      background: linear-gradient(135deg, rgba(178, 25, 196, 0.3) 0%, rgba(189, 162, 255, 0.3) 100%);
-      border: 1px solid rgba(190, 25, 289, 0.5);
-      border-radius: 20px;
-      background-size: 100% 100%;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      z-index: 0;
-      box-shadow: 0 0 5px rgba(176, 25, 136, 0.3);
-    }
-
-    .profile-tabs.tab-2::before {
-      transform: translateX(100%);
-    }
-
-    .profile-tab {
-      padding: 12px 25px;
-      cursor: pointer;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.7);
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      flex: 1;
-      transition: all 0.3s ease;
-      justify-content: center;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 0.5px;
-    }
-
-    .profile-tab.active {
-      color: #ffffff;
-      font-weight: 900;
-      text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+      display: none;
     }
 
     .profile-content {
@@ -294,9 +242,6 @@
       border: 1px solid rgba(210, 25, 226, 0.2);
       position: relative;
       overflow: hidden;
-    }
-    .bank{
-        padding-top: 15px;
     }
 
     .info-card::before {
@@ -381,53 +326,6 @@
     .info-value.copyable:hover::after {
       opacity: 1;
       color: var(--primary);
-    }
-
-    .bank-details-form {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group {
-      position: relative;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 8px;
-      font-weight: 500;
-      font-family: 'Exo 2', sans-serif;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 8px 10px 8px 40px;
-      background: rgba(20, 20, 30, 0.7);
-      border: 1px solid rgba(0, 255, 136, 0.2);
-      border-radius: 8px;
-      font-family: 'Exo 2', sans-serif;
-      font-size: 10px;
-      font-weight: 500;
-      transition: var(--transition);
-      color: white;
-    }
-
-    .form-control:focus {
-      border-color: rgba(0, 255, 136, 0.8);
-      box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.2);
-      outline: none;
-      background: rgba(20, 20, 30, 0.9);
-    }
-
-    .form-icon {
-      position: absolute;
-      left: 15px;
-      top: 22px;
-      color: rgba(0, 255, 136, 0.7);
-      font-size: 14px;
     }
 
     .btn {
@@ -991,7 +889,6 @@
     <div class="profile-body">
       <div class="profile-tabs" id="profileTabs">
         <div class="profile-tab active" onclick="showTab('profile')">Profile Info</div>
-        <div class="profile-tab" onclick="showTab('bank')">Bank Details</div>
       </div>
 
       <div id="profile" class="profile-content active">
@@ -1047,42 +944,6 @@
               <span class="info-value" id="totalReferrals">0</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div id="bank" class="profile-content">
-        <div class="info-card bank">
-          <h3><i class="fas fa-university"></i> Bank Account Details</h3>
-          
-          <form class="bank-details-form" id="bankForm">
-            <div class="form-group">
-              <label for="accountName">Account Holder Name</label>
-              <i class="fas fa-user-alt form-icon"></i>
-              <input type="text" id="accountName" class="form-control" placeholder="Enter account holder name">
-            </div>
-            
-            <div class="form-group">
-              <label for="accountNumber">Account Number</label>
-              <i class="fas fa-credit-card form-icon"></i>
-              <input type="text" id="accountNumber" class="form-control" placeholder="Enter account number">
-            </div>
-            
-            <div class="form-group">
-              <label for="bankName">Bank Name</label>
-              <i class="fas fa-university form-icon"></i>
-              <input type="text" id="bankName" class="form-control" placeholder="Enter bank name">
-            </div>
-            
-            <div class="form-group">
-              <label for="ifscCode">IFSC Code</label>
-              <i class="fas fa-code form-icon"></i>
-              <input type="text" id="ifscCode" class="form-control" placeholder="Enter IFSC code">
-            </div>
-            
-            <button type="button" class="btn btn-primary" onclick="saveBankDetails()">Save Bank Details
-              <div class="spinner" id="saveSpinner"></div>
-            </button>
-          </form>
         </div>
       </div>
 
@@ -1272,12 +1133,6 @@
       email: null,
       profileData: null,
       referralCode: null,
-      bankDetails: {
-        accountNumber: "",
-        accountName: "",
-        bankName: "",
-        ifscCode: ""
-      },
       totalBalance: 0,
       referralEarnings: 0,
       totalReferrals: 0,
@@ -1338,36 +1193,6 @@
                 selectedPicIndex: 0
               };
             }
-          }
-          
-          // Update bank details if they exist
-          if (data.BankDetails) {
-            userData.bankDetails = {
-              accountNumber: data.BankDetails.accountNumber || "",
-              accountName: data.BankDetails.accountName || "",
-              bankName: data.BankDetails.bankName || "",
-              ifscCode: data.BankDetails.ifscCode || ""
-            };
-            
-            // Update form fields
-            document.getElementById('accountName').value = userData.bankDetails.accountName;
-            document.getElementById('accountNumber').value = userData.bankDetails.accountNumber;
-            document.getElementById('bankName').value = userData.bankDetails.bankName;
-            document.getElementById('ifscCode').value = userData.bankDetails.ifscCode;
-          } else if (data.bankDetails) {
-            // Alternative field name check
-            userData.bankDetails = {
-              accountNumber: data.bankDetails.accountNumber || "",
-              accountName: data.bankDetails.accountName || "",
-              bankName: data.bankDetails.bankName || "",
-              ifscCode: data.bankDetails.ifscCode || ""
-            };
-            
-            // Update form fields
-            document.getElementById('accountName').value = userData.bankDetails.accountName;
-            document.getElementById('accountNumber').value = userData.bankDetails.accountNumber;
-            document.getElementById('bankName').value = userData.bankDetails.bankName;
-            document.getElementById('ifscCode').value = userData.bankDetails.ifscCode;
           }
           
           // Update UI
@@ -1683,90 +1508,7 @@
         });
     }
 
-    // ====================== BANK DETAILS FUNCTIONS ====================== //
-    function saveBankDetails() {
-      playSound('click');
-      
-      const accountName = document.getElementById('accountName').value.trim();
-      const accountNumber = document.getElementById('accountNumber').value.trim();
-      const bankName = document.getElementById('bankName').value.trim();
-      const ifscCode = document.getElementById('ifscCode').value.trim();
-      
-      // Basic validation
-      if (!accountName || !accountNumber || !bankName || !ifscCode) {
-        showToast("Please fill in all bank details", "error");
-        playSound('alert');
-        return;
-      }
-      
-      if (accountNumber.length < 9 || accountNumber.length > 18) {
-        showToast("Please enter a valid account number", "error");
-        playSound('alert');
-        return;
-      }
-      
-      if (ifscCode.length !== 11) {
-        showToast("IFSC code must be 11 characters", "error");
-        playSound('alert');
-        return;
-      }
-      
-      // Show loading spinner
-      document.getElementById('saveSpinner').style.display = 'block';
-      
-      // Save to Firebase
-      const updates = {
-        'BankDetails/accountName': accountName,
-        'BankDetails/accountNumber': accountNumber,
-        'BankDetails/bankName': bankName,
-        'BankDetails/ifscCode': ifscCode
-      };
-      
-      database.ref('appusers/' + userData.uid).update(updates)
-        .then(() => {
-          // Update local data
-          userData.bankDetails = {
-            accountName,
-            accountNumber,
-            bankName,
-            ifscCode
-          };
-          
-          showToast("Bank details saved successfully!", "success");
-          document.getElementById('saveSpinner').style.display = 'none';
-        })
-        .catch(error => {
-          showToast("Error saving bank details: " + error.message, "error");
-          playSound('alert');
-          document.getElementById('saveSpinner').style.display = 'none';
-        });
-    }
-
     // ====================== UTILITY FUNCTIONS ====================== //
-    function showTab(tabId) {
-      // Play profile tab sound
-      playSound('profileTab', 0.4);
-      
-      // Update tabs UI
-      const tabs = document.querySelectorAll('.profile-tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
-      
-      const activeTab = document.querySelector(`.profile-tab[onclick="showTab('${tabId}')"]`);
-      activeTab.classList.add('active');
-      
-      // Update tab indicator
-      if (tabId === 'profile') {
-        document.getElementById('profileTabs').classList.remove('tab-2');
-      } else {
-        document.getElementById('profileTabs').classList.add('tab-2');
-      }
-      
-      // Show the selected content
-      const contents = document.querySelectorAll('.profile-content');
-      contents.forEach(content => content.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-    }
-
     function toggleSection(sectionId) {
       const content = document.getElementById(sectionId + 'Content');
       const icon = document.getElementById(sectionId + 'Icon');
@@ -1852,11 +1594,10 @@
     }
 
     // ====================== EVENT LISTENERS ====================== //
-    // Add click event listeners for default click sounds
     document.addEventListener('DOMContentLoaded', function() {
       // Add click sounds to interactive elements
       const clickableElements = [
-        'button:not([onclick*="copyToClipboard"]):not([onclick*="logout"]):not([onclick*="showProfileModal"]):not([onclick*="closeProfileModal"]):not([onclick*="saveProfile"]):not([onclick*="openLocalGallery"]):not([onclick*="saveBankDetails"]):not([onclick*="showTab"])',
+        'button:not([onclick*="copyToClipboard"]):not([onclick*="logout"]):not([onclick*="showProfileModal"]):not([onclick*="closeProfileModal"]):not([onclick*="saveProfile"]):not([onclick*="openLocalGallery"]):not([onclick*="showTab"])',
         'input[type="submit"]',
         '.btn:not(.profile-tab)',
         '.profile-pic-option',
@@ -1869,7 +1610,7 @@
         if (e.target.matches(clickableElements) || 
             e.target.closest(clickableElements) ||
             e.target.onclick) {
-          // Check if it's not a section toggle or profile tab (they have their own sounds)
+          // Check if it's not a section toggle (they have their own sounds)
           if (!e.target.closest('[onclick*="toggleSection"]') && 
               !e.target.closest('[onclick*="showTab"]') &&
               !e.target.matches('[onclick*="toggleSection"]') &&
